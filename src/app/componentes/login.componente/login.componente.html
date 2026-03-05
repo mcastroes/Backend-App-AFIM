@@ -1,0 +1,20 @@
+<div class="login-container">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form-group">
+        <label for="passcode">Contraseña numérica</label>
+        <input 
+            type="text" 
+            id="passcode"
+            formControlName="passcode"
+            placeholder="Ingresa el código numérico aquí..." 
+            class="custom-input">
+        <button type="submit" class="custom-button" [disabled]="isLoading()"> 
+            {{ isLoading() ? 'Cargando...' : 'Entrar' }}
+        </button>
+    </form>
+
+    @if (messageType() !== 'hidden') {
+        <div class="message-box" [class]="messageType()">
+            {{ message() }}
+        </div>
+    }
+</div>
