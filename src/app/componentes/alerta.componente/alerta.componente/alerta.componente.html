@@ -1,0 +1,25 @@
+<div class="bg-white border border-red-100 rounded-3xl p-6 shadow-md relative overflow-hidden flex flex-col gap-4 animate-in slide-in-from-right-4 duration-300">
+  <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-red-500"></div>
+  
+  <button (click)="onCerrar()" class="absolute top-4 right-4 text-gray-400 hover:text-black p-1 transition-colors">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+
+  <div class="flex items-start gap-4">
+    <div class="bg-red-50 p-2 rounded-xl text-red-600 shrink-0">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+    </div>
+    <div class="pr-6">
+      <h3 class="font-bold text-gray-900 text-lg">Alerta Sanitaria</h3>
+      <p class="text-gray-600 text-sm leading-snug">
+        El sistema detecta un empeoramiento en el seguimiento de <b>{{ nombrePaciente }}</b>.
+      </p>
+    </div>
+  </div>
+
+  <div class="flex justify-end">
+    <button (click)="onIrAlPaciente()" class="bg-[#333] text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-black transition-colors active:scale-95 transition-transform">
+      Ver Perfil de Usuario
+    </button>
+  </div>
+</div>

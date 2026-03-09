@@ -1,2 +1,51 @@
-<h1>Bienvenido, Administrador</h1>
-<p>Has entrado con el código 1.</p>
+<div class="h-screen w-full bg-white flex flex-col font-sans text-[#333] overflow-hidden">
+  
+  <header class="h-20 w-full flex items-center justify-between px-8 shrink-0 border-b border-gray-100 relative bg-white z-20">
+    <div class="flex items-center gap-4">
+      <button (click)="volver()" class="text-gray-600 hover:bg-gray-100 p-2 rounded-full transition-all active:scale-90">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </button>
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-[#E5D1CD] rounded-full flex items-center justify-center text-[#592014] shadow-sm">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <span class="text-gray-500 font-medium text-lg">Profesional</span>
+      </div>
+    </div>
+    <h2 class="absolute left-1/2 -translate-x-1/2 text-gray-800 font-bold text-xl tracking-tight uppercase">Página Principal</h2>
+  </header>
+
+  <main class="flex-1 flex flex-row gap-8 p-6 overflow-hidden bg-white">
+    
+    <div class="w-1/2 flex flex-col gap-4 h-full">
+      <button (click)="irAGestionUsuarios()" 
+        class="flex-1 bg-[#F6F6F6] border border-gray-200 rounded-2xl text-gray-600 text-xl font-medium hover:bg-[#E5D1CD] hover:border-[#A64E2E] hover:text-[#592014] transition-all shadow-sm flex items-center justify-center px-8 text-center leading-tight">
+        Gestión de Personas-Usuarias
+      </button>
+      
+      <button (click)="irAGestionProfesionales()" 
+        class="flex-1 bg-[#F6F6F6] border border-gray-200 rounded-2xl text-gray-600 text-xl font-medium hover:bg-[#E5D1CD] hover:border-[#A64E2E] hover:text-[#592014] transition-all shadow-sm flex items-center justify-center px-8 text-center leading-tight">
+        Personas-Usuarias en seguimiento
+      </button>
+      
+      <button (click)="irAEstadisticas()" 
+        class="flex-1 bg-[#F6F6F6] border border-gray-200 rounded-2xl text-gray-600 text-xl font-medium hover:bg-[#E5D1CD] hover:border-[#A64E2E] hover:text-[#592014] transition-all shadow-sm flex items-center justify-center px-8 text-center leading-tight">
+        Consultas Pasadas
+      </button>
+    </div>
+
+    <div class="w-1/2 h-full overflow-y-auto pr-2 flex flex-col gap-6 custom-scrollbar">
+      
+      <app-calendario class="w-full shrink-0"></app-calendario>
+
+      @if (showAlert) {
+        <app-alerta 
+          [nombrePaciente]="'Fulanito'" 
+          (cerrar)="showAlert = false"
+          class="shrink-0 mb-4">
+        </app-alerta>
+      }
+
+    </div>
+  </main>
+</div>

@@ -1,9 +1,15 @@
-<div class="pantalla-completa-fondo-gris">
-  <header>
-    <h1>App AFIM</h1>
-    </header>
+<div class="h-screen w-full bg-[#E5D1CD] flex flex-col font-sans overflow-hidden relative">
+  
+  <header class="absolute top-0 left-0 w-full pt-12 flex justify-center items-center z-10">
+    <h1 class="text-[2.5rem] font-bold text-[#592014] m-0 tracking-tight drop-shadow-sm">
+      App AFIM
+    </h1>
+  </header>
 
-  <main>
-    <app-login></app-login>
+  <main class="h-full w-full flex items-center justify-center p-6">
+    <div class="w-full max-w-[580px]">
+        <app-login></app-login>
+    </div>
   </main>
+
 </div>
