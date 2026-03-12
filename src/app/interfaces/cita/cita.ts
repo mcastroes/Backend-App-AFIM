@@ -1,15 +1,12 @@
-export interface Paciente {
-  id: number;
-  nombre: string;
-  apellidos: string;
-}
+import { Injectable } from '@angular/core';
+import { Paciente } from '../paciente/paciente';
 
 export interface Cita {
   id: number;
   fecha: string;
   dia: number;
   hora: string;
-  id_paciente: number;
+  paciente: Paciente;
 }
 
 export interface CitaVista {

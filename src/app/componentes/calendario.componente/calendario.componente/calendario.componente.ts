@@ -1,68 +1,67 @@
-import { Component, inject } from '@angular/core';
-import { CitaService } from '../../../servicios/cita.serv/cita.serv';
-import { CitaVista, Paciente } from '../../../interfaces/cita/cita';
+import { Component, OnInit, inject } from '@angular/core';
+import { CitaVista } from '../../../interfaces/cita/cita';
+import { Paciente } from '../../../interfaces/paciente/paciente';
+import { CitaService } from '../../../servicios/cita.serv/cita.serv'; 
+import { PacienteService } from '../../../servicios/paciente.serv/paciente.serv'; 
 
 @Component({
   selector: 'app-calendario',
-  standalone: true,
-  imports: [], 
   templateUrl: './calendario.componente.html',
-  styleUrl: './calendario.componente.css'
+  styleUrls: ['./calendario.componente.css']
 })
-export class CalendarioComponent {
+export class CalendarioComponent implements OnInit {
   private _Citas = inject(CitaService);
+  private _Pacientes = inject(PacienteService);
 
-  showAgenda: boolean = false;
-  showModal: boolean = false;
+  listaPacientes: Paciente[] = [];
+  citasDelDia: CitaVista[] = [];
   
-  diasVacios: number[] = [1, 2]; 
+  diasVacios: number[] = [1, 2, 3];
   diasMes: number[] = Array.from({length: 31}, (_, i) => i + 1);
   
-  selectedDay: number | null = null;
-  citasDelDia: CitaVista[] = [];
-  listaPacientes: Paciente[] = [];
+  selectedDay: number = 0;
+  showAgenda: boolean = false;
+  showModal: boolean = false;
 
-  constructor() {
-    this.listaPacientes = this._Citas.getPacientes();
+  ngOnInit(): void {
+    this.listaPacientes = this._Pacientes.getPacientes();
   }
 
-  seleccionarDia(dia: number) {
+  seleccionarDia(dia: number): void {
     this.selectedDay = dia;
     this.showAgenda = true;
-    this.citasDelDia = this._Citas.getCitasVistaPorDia(dia);
+    this.actualizarCitasDelDia();
   }
 
-  cerrarAgenda() {
+  cerrarAgenda(): void {
     this.showAgenda = false;
-    this.selectedDay = null;
+  }
+
+  abrirModal(): void {
+    this.showModal = true;
+  }
+
+  cerrarModal(): void {
+    this.showModal = false;
   }
 
   tieneCitas(dia: number): boolean {
     return this._Citas.tieneCitas(dia);
   }
 
-  abrirModal() {
-    if (!this.selectedDay) return;
-    this.showModal = true;
-  }
-
-  cerrarModal() {
-    this.showModal = false;
-  }
-
-  guardarCita(hora: string, pacienteIdString: string) {
-    const idPaciente = Number(pacienteIdString);
-
-    if (!hora || !idPaciente) {
-      alert("Por favor, selecciona una hora y un paciente válidos.");
+  guardarCita(hora: string, pacienteId: string): void {
+    if (!hora || !pacienteId) {
       return;
     }
-    
-    if (this.selectedDay) {
-      this._Citas.agregarCita(this.selectedDay, hora, idPaciente);
-      
-      this.citasDelDia = this._Citas.getCitasVistaPorDia(this.selectedDay);
-      this.cerrarModal();
-    }
+
+    const idNumerico = Number(pacienteId);
+
+    this._Citas.agregarCita(this.selectedDay, hora, idNumerico);
+    this.actualizarCitasDelDia();
+    this.cerrarModal();
+  }
+
+  private actualizarCitasDelDia(): void {
+    this.citasDelDia = this._Citas.getCitasVistaPorDia(this.selectedDay);
   }
 }
