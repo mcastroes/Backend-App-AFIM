@@ -32,7 +32,7 @@ export class PaginaPrincipalAdministradorComponent {
   }
 
   irAGestionUsuarios() {
-    this.router.navigate(['/admin-usuarios']);
+    this.router.navigate(['/admin/pagina-indice-pacientes']);
   }
 
   irAEstadisticas() {

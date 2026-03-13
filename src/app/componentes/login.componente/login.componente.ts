@@ -41,9 +41,9 @@ export class LoginComponente {
 
       if (response.success) {
         if (response.role === 'admin') {
-          this.router.navigate(['/pagina-principal']);
+          this.router.navigate(['admin/pagina-principal']);
         } else {
-          this.router.navigate(['/pagina-principal-usuario']);
+          this.router.navigate(['usuario/pagina-principal-usuario']);
         }
       } else {
         this.message.set('El código es incorrecto.');

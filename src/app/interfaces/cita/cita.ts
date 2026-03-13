@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import { Paciente } from '../paciente/paciente';
 
 export interface Cita {
