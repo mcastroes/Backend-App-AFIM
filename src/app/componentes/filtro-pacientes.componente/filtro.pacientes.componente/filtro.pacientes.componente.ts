@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
+import { Component, output, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -9,7 +9,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
   styleUrl: './filtro.pacientes.componente.css'
 })
 export class FiltroPacientesComponent {
-  @Output() buscar = new EventEmitter<any>();
+  buscar = output<any>();
   private fb = inject(FormBuilder);
 
   filtroForm: FormGroup = this.fb.group({
@@ -23,20 +23,18 @@ export class FiltroPacientesComponent {
 
   esCampoValido(nombreCampo: string): boolean | null {
     const campo = this.filtroForm.get(nombreCampo);
-    return !!campo?.errors && campo?.touched;
+    return !!campo?.errors && !!campo?.touched;
   }
 
   getErrorCampo(nombreCampo: string): string | null {
     const campo = this.filtroForm.get(nombreCampo);
-    if (!campo) return null;
+    if (!campo || !campo.errors) return null;
 
-    const errors = campo.errors ?? {};
-    for (const key of Object.keys(errors)) {
-      switch (key) {
-        case 'minlength': 
-          return `Mínimo de ${errors['minlength'].requiredLength} caracteres`;
-      }
+    const errors = campo.errors;
+    if (errors['minlength']) {
+      return `Mínimo de ${errors['minlength'].requiredLength} caracteres`;
     }
+    
     return null;
   }
 

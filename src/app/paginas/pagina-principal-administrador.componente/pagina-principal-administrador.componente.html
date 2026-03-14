@@ -36,12 +36,19 @@
 
     <div class="w-1/2 h-full overflow-y-auto pr-2 flex flex-col gap-6 custom-scrollbar">
       
-      <app-calendario class="w-full shrink-0"></app-calendario>
+      <app-calendario 
+        class="w-full shrink-0"
+        [listaPacientes]="listaPacientes()"
+        [citasDelDia]="citasDelDia()"
+        [diasConCitas]="diasConCitas()"
+        (diaSeleccionado)="procesarDiaSeleccionado($event)"
+        (nuevaCita)="procesarNuevaCita($event)">
+      </app-calendario>
 
-      @if (showAlert) {
+      @if (showAlert()) {
         <app-alerta 
           [nombrePaciente]="'Fulanito'" 
-          (cerrar)="showAlert = false"
+          (cerrar)="showAlert.set(false)"
           class="shrink-0 mb-4">
         </app-alerta>
       }

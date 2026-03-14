@@ -12,31 +12,31 @@
     </div>
 
     <div class="grid grid-cols-7 gap-y-1 text-center text-sm font-medium">
-      @for (vacio of diasVacios; track $index) {
+      @for (vacio of diasVacios(); track $index) {
         <div class="py-3 text-transparent">0</div>
       }
-      @for (dia of diasMes; track dia) {
+      @for (dia of diasMes(); track dia) {
         <div 
           (click)="seleccionarDia(dia)"
           class="relative py-3 cursor-pointer transition-all rounded-xl flex flex-col items-center justify-center hover:bg-gray-100"
-          [class.bg-[#333]]="dia === selectedDay"
-          [class.text-white]="dia === selectedDay"
-          [class.text-gray-800]="dia !== selectedDay">
+          [class.bg-[#333]]="dia === selectedDay()"
+          [class.text-white]="dia === selectedDay()"
+          [class.text-gray-800]="dia !== selectedDay()">
           {{ dia }}
           @if (tieneCitas(dia)) {
             <div class="absolute bottom-1 w-1.5 h-1.5 rounded-full" 
-                 [class.bg-white]="dia === selectedDay" 
-                 [class.bg-[#A64E2E]]="dia !== selectedDay"></div>
+                 [class.bg-white]="dia === selectedDay()" 
+                 [class.bg-[#A64E2E]]="dia !== selectedDay()"></div>
           }
         </div>
       }
     </div>
   </div>
 
-  @if (showAgenda) {
+  @if (showAgenda()) {
     <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm animate-in fade-in slide-in-from-top-2 duration-200 shrink-0">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3 mb-4">
-        <h3 class="font-bold text-gray-800">Citas del día {{ selectedDay }}</h3>
+        <h3 class="font-bold text-gray-800">Citas del día {{ selectedDay() }}</h3>
         <div class="flex gap-2">
           <button (click)="abrirModal()" class="bg-[#A64E2E] text-white w-8 h-8 rounded-full flex items-center justify-center hover:scale-110 transition-transform">+</button>
           <button (click)="cerrarAgenda()" class="text-gray-400 hover:text-black font-bold px-2">✕</button>
@@ -44,7 +44,7 @@
       </div>
 
       <div class="flex flex-col gap-2">
-        @for (cita of citasDelDia; track $index) {
+        @for (cita of citasDelDia(); track $index) {
           <div class="bg-gray-50 p-3 rounded-lg border-l-4 border-[#A64E2E] flex justify-between items-center shadow-sm">
             <span class="font-bold text-[#592014] text-xs px-2 py-1 bg-[#E5D1CD] rounded-md">{{ cita.hora }}</span>
             <span class="text-gray-700 text-sm font-medium flex-1 ml-4">{{ cita.nombrePaciente }}</span>
@@ -57,15 +57,15 @@
   }
 </div>
 
-@if (showModal) {
+@if (showModal()) {
   <div class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[100] p-4" (click)="cerrarModal()">
     <div class="bg-white rounded-2xl p-8 w-full max-w-sm shadow-2xl scale-in-center" (click)="$event.stopPropagation()">
-      <h3 class="text-xl font-bold text-gray-800 mb-6 italic">Añadir Cita - Día {{ selectedDay }}</h3>
+      <h3 class="text-xl font-bold text-gray-800 mb-6 italic">Añadir Cita - Día {{ selectedDay() }}</h3>
       <div class="flex flex-col gap-5">
         <input #horaInput type="time" class="p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#A64E2E]">
         <select #pacienteSelect class="p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#A64E2E]">
           <option value="">Seleccionar paciente...</option>
-          @for (p of listaPacientes; track p.id) {
+          @for (p of listaPacientes(); track p.id) {
             <option [value]="p.id">{{ p.nombre }} {{ p.apellidos }}</option>
           }
         </select>

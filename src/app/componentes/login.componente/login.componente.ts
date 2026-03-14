@@ -1,54 +1,28 @@
-import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AuthService } from '../../servicios/auth.serv/auth-serv';
+import { Component, input, output, inject } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [ReactiveFormsModule],
-  templateUrl: './login.componente.html',
-  styleUrl: './login.componente.css',
+  templateUrl: './login.componente.html'
 })
-export class LoginComponente {
+export class LoginComponent {
   private fb = inject(FormBuilder);
-  private authService = inject(AuthService);
-  private router = inject(Router);
 
-  message = signal<string>('');
-  messageType = signal<'hidden' | 'error' | 'success'>('hidden');
-  isLoading = signal<boolean>(false);
+  isLoading = input<boolean>(false);
+  messageType = input<'hidden' | 'error' | 'success'>('hidden');
+  message = input<string>('');
 
-  loginForm: FormGroup = this.fb.group({
-    passcode: ['', [Validators.required, Validators.pattern('^[0-9]+$')]]
+  submitPasscode = output<string>();
+
+  loginForm = this.fb.group({
+    passcode: ['', Validators.required]
   });
 
-  onSubmit(): void {
-    if (this.loginForm.invalid) {
-      this.message.set('Por favor, ingresa un código válido.');
-      this.messageType.set('error');
-      return;
+  onSubmit() {
+    if (this.loginForm.valid) {
+      this.submitPasscode.emit(this.loginForm.value.passcode!);
     }
-
-    this.isLoading.set(true);
-    this.message.set('Verificando acceso...');
-    this.messageType.set('success');
-
-    const codigo = this.loginForm.get('passcode')?.value.trim();
-
-    this.authService.verificarCodigo(codigo).subscribe((response) => {
-      this.isLoading.set(false);
-
-      if (response.success) {
-        if (response.role === 'admin') {
-          this.router.navigate(['admin/pagina-principal']);
-        } else {
-          this.router.navigate(['usuario/pagina-principal-usuario']);
-        }
-      } else {
-        this.message.set('El código es incorrecto.');
-        this.messageType.set('error');
-      }
-    });
   }
 }

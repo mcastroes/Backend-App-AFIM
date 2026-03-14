@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 @Component({
   selector: 'app-alerta',
@@ -7,16 +7,16 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   styleUrl: './alerta.componente.css'
 })
 export class AlertaComponent {
-  @Input() nombrePaciente: string = 'Fulanito';
+  nombrePaciente = input<string>('Fulanito');
   
-  @Output() cerrar = new EventEmitter<void>();
-  @Output() irAlPaciente = new EventEmitter<string>();
+  cerrar = output<void>();
+  irAlPaciente = output<string>();
 
   onCerrar() {
     this.cerrar.emit();
   }
 
   onIrAlPaciente() {
-    this.irAlPaciente.emit(this.nombrePaciente);
+    this.irAlPaciente.emit(this.nombrePaciente());
   }
 }

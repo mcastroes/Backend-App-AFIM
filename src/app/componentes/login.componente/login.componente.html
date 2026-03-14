@@ -1,33 +1,29 @@
-<div class="min-h-screen bg-[#E5D1CD] flex items-center justify-center p-8 text-[#333333] font-sans">
+<div class="w-full bg-[#FFFCFC] border border-[#A64E2E] rounded-2xl p-10 flex flex-col shadow-[0_4px_6px_-1px_rgba(166,78,46,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)]">
     
-    <div class="w-full max-w-[580px] bg-[#FFFCFC] border border-[#A64E2E] rounded-2xl p-10 flex flex-col shadow-[0_4px_6px_-1px_rgba(166,78,46,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)]">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="w-full flex flex-col">
+        <label for="passcode" class="text-[1.25rem] text-[#592014] font-bold mb-4 block text-left w-full">
+            Contraseña numérica
+        </label>
         
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="w-full flex flex-col">
-            <label for="passcode" class="text-[1.25rem] text-[#592014] font-bold mb-4 block text-left w-full">
-                Contraseña numérica
-            </label>
-            
-            <input 
-                type="text" 
-                id="passcode"
-                formControlName="passcode"
-                placeholder="Ingresa el código numérico aquí..." 
-                class="w-full bg-[#FFFCFC] border border-[#A64E2E] text-[#49454F] rounded-xl p-4 text-base mb-6 transition-all duration-200 shadow-[0_2px_4px_rgba(0,0,0,0.05)] outline-none focus:bg-[#E5D1CD] focus:border-[#8a3f24] placeholder:text-gray-400">
-            
-            <button 
-                type="submit" 
-                class="w-full bg-[#A64E2E] text-white text-[1.1rem] font-semibold p-4 border-none rounded-xl cursor-pointer transition-colors duration-200 mt-2 hover:bg-black disabled:opacity-70 disabled:cursor-not-allowed" 
-                [disabled]="isLoading()"> 
-                {{ isLoading() ? 'Cargando...' : 'Entrar' }}
-            </button>
-        </form>
+        <input 
+            type="text" 
+            id="passcode"
+            formControlName="passcode"
+            placeholder="Ingresa el código numérico aquí..." 
+            class="w-full bg-[#FFFCFC] border border-[#A64E2E] text-[#49454F] rounded-xl p-4 text-base mb-6 transition-all duration-200 shadow-[0_2px_4px_rgba(0,0,0,0.05)] outline-none focus:bg-[#E5D1CD] focus:border-[#8a3f24] placeholder:text-gray-400">
+        
+        <button 
+            type="submit" 
+            class="w-full bg-[#A64E2E] text-white text-[1.1rem] font-semibold p-4 border-none rounded-xl cursor-pointer transition-colors duration-200 mt-2 hover:bg-black disabled:opacity-70 disabled:cursor-not-allowed" 
+            [disabled]="isLoading()"> 
+            {{ isLoading() ? 'Cargando...' : 'Entrar' }}
+        </button>
+    </form>
 
-        @if (messageType() !== 'hidden') {
-            <div 
-                [class]="'mt-6 p-3 rounded-lg text-[0.95rem] text-center border font-medium ' + (messageType() === 'error' ? 'bg-[#FEF2F2] text-[#991B1B] border-[#FECACA]' : 'bg-[#F0FDF4] text-[#166534] border-[#BBF7D0]')">
-                {{ message() }}
-            </div>
-        }
-    </div>
-
+    @if (messageType() !== 'hidden') {
+        <div 
+            [class]="'mt-6 p-3 rounded-lg text-[0.95rem] text-center border font-medium ' + (messageType() === 'error' ? 'bg-[#FEF2F2] text-[#991B1B] border-[#FECACA]' : 'bg-[#F0FDF4] text-[#166534] border-[#BBF7D0]')">
+            {{ message() }}
+        </div>
+    }
 </div>
