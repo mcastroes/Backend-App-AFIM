@@ -44,6 +44,11 @@ export class FiltroPacientesComponent {
       return;
     }
     
-    this.buscar.emit(this.filtroForm.value);
+    const formValues = this.filtroForm.value;
+    const filtrosLimpios = Object.fromEntries(
+      Object.entries(formValues).filter(([_, valor]) => valor !== '' && valor !== null)
+    );
+    
+    this.buscar.emit(filtrosLimpios);
   }
 }
