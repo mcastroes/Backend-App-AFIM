@@ -1,3 +1,5 @@
+import { Cita } from '../cita/cita';
+
 export interface Paciente {
     id: number;
     nombre: string;
@@ -5,4 +7,5 @@ export interface Paciente {
     riesgo: 'bajo' | 'medio' | 'alto';
     discapacidad: 'fisica' | 'intelectual' | 'sensorial';
     en_seguimiento: boolean;
+    citas: Cita[];
 }

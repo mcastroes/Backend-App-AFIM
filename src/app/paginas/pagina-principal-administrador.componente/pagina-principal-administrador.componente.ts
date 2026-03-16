@@ -2,7 +2,6 @@ import { Component, HostListener, inject, signal, computed, OnInit } from '@angu
 import { Router } from '@angular/router';
 import { AlertaComponent } from '../../componentes/alerta.componente/alerta.componente/alerta.componente';
 import { CalendarioComponent } from '../../componentes/calendario.componente/calendario.componente/calendario.componente';
-import { CitaService } from '../../servicios/cita.serv/cita.serv'; 
 import { PacienteService } from '../../servicios/paciente.serv/paciente.serv'; 
 
 @Component({
@@ -15,7 +14,6 @@ import { PacienteService } from '../../servicios/paciente.serv/paciente.serv';
 export class PaginaPrincipalAdministradorComponent implements OnInit {
   
   private router = inject(Router);
-  private _citaServ = inject(CitaService);
   private _pacienteServ = inject(PacienteService);
 
   showAlert = signal<boolean>(false);
@@ -24,7 +22,24 @@ export class PaginaPrincipalAdministradorComponent implements OnInit {
   diasConCitas = signal<number[]>([]);
 
   citasDelDia = computed(() => {
-    return this._citaServ.getCitasVistaPorDia(this.diaSeleccionado());
+    const diaSel = this.diaSeleccionado();
+    const pacientes = this.listaPacientes();
+    const citasVista: any[] = [];
+
+    pacientes.forEach(paciente => {
+      if (paciente.citas && paciente.citas.length > 0) {
+        paciente.citas.forEach((cita: any) => {
+          if (cita.dia === diaSel) {
+            citasVista.push({
+              hora: cita.hora,
+              nombrePaciente: `${paciente.nombre} ${paciente.apellidos}`
+            });
+          }
+        });
+      }
+    });
+
+    return citasVista.sort((a, b) => a.hora.localeCompare(b.hora));
   });
 
   @HostListener('document:keydown', ['$event'])
@@ -36,7 +51,12 @@ export class PaginaPrincipalAdministradorComponent implements OnInit {
 
   ngOnInit(): void {
     this.listaPacientes.set(this._pacienteServ.getPacientes());
-    this.diasConCitas.set([5, 12, 24]); 
+    
+    const diasOcupados = new Set<number>();
+    this.listaPacientes().forEach(p => {
+       p.citas?.forEach((c: any) => diasOcupados.add(c.dia));
+    });
+    this.diasConCitas.set(Array.from(diasOcupados));
   }
 
   procesarDiaSeleccionado(dia: number): void {
@@ -44,9 +64,14 @@ export class PaginaPrincipalAdministradorComponent implements OnInit {
   }
 
   procesarNuevaCita(datos: {dia: number, hora: string, id_paciente: number}): void {
-    this._citaServ.agregarCita(datos.dia, datos.hora, datos.id_paciente);
+    this._pacienteServ.agregarCita(datos.id_paciente, {
+      dia: datos.dia,
+      hora: datos.hora
+    });
     
+    this.listaPacientes.set(this._pacienteServ.getPacientes());
     this.diaSeleccionado.set(datos.dia); 
+
     if (!this.diasConCitas().includes(datos.dia)) {
       this.diasConCitas.update(dias => [...dias, datos.dia]);
     }
