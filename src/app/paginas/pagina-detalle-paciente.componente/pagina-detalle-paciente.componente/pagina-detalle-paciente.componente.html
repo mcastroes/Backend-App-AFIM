@@ -1,0 +1,48 @@
+@if (paciente(); as p) {
+  <div class="min-h-screen bg-white text-[#333] font-sans flex flex-col">
+    <header class="flex items-center justify-between p-6 bg-white shrink-0">
+      <div class="flex items-center gap-6">
+        <button (click)="volver()" class="text-2xl font-bold hover:scale-110 transition-transform">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <h1 class="text-3xl font-bold text-gray-500">Usuario: <span class="text-gray-800">{{ p.nombre }}</span></h1>
+      </div>
+      
+      <div class="flex items-center gap-4">
+        <button class="text-gray-600 hover:text-black transition-colors font-bold tracking-widest">&gt;&gt;</button>
+        <button class="border border-gray-300 rounded-lg px-4 py-1.5 font-bold text-gray-700 flex items-center gap-2 hover:bg-gray-50 transition-colors">
+          <span class="text-xl">+</span> Informe
+        </button>
+        <button class="w-8 h-8 border-2 border-gray-700 rounded-full flex items-center justify-center font-bold text-gray-700 hover:bg-gray-100 transition-colors">i</button>
+      </div>
+    </header>
+
+    <main class="flex-1 flex items-stretch gap-12 p-12">
+      <div class="w-3/5 flex flex-col">
+        <app-grafico class="block w-full flex-1 min-h-[400px]"></app-grafico>
+      </div>
+
+      <div class="w-2/5 flex flex-col gap-8">
+        <div class="flex flex-col gap-4 shrink-0">
+          <button class="w-full border border-gray-300 rounded-xl py-3 px-4 bg-gray-50 text-gray-600 font-medium hover:bg-gray-100 transition-colors shadow-sm">
+            Datos de la Persona-Usuaria
+          </button>
+          <button class="w-full border border-gray-300 rounded-xl py-3 px-4 bg-gray-50 text-gray-600 font-medium hover:bg-gray-100 transition-colors shadow-sm">
+            Recomendaciones Clínicas
+          </button>
+          <button class="w-full border border-gray-300 rounded-xl py-3 px-4 bg-gray-50 text-gray-600 font-medium hover:bg-gray-100 transition-colors shadow-sm">
+            Cuestionarios y pruebas
+          </button>
+        </div>
+
+        <div class="w-full flex-1 relative">
+          <app-notas 
+            class="absolute inset-0"
+            [notas]="notasDelPaciente()" 
+            (nuevaNota)="procesarNuevaNota()">
+          </app-notas>
+        </div>
+      </div>
+    </main>
+  </div>
+}

@@ -54,7 +54,7 @@ export class PaginaIndicePacientesComponente implements OnInit {
   }
 
   abrirPerfilPaciente(paciente: Paciente): void {
-    this.router.navigate(['/paciente', paciente.id]);
+    this.router.navigate(['admin/pagina-detalle-paciente', paciente.id]);
   }
 
   abrirModalCreacion(): void {

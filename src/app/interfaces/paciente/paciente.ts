@@ -8,4 +8,10 @@ export interface Paciente {
     discapacidad: 'fisica' | 'intelectual' | 'sensorial';
     en_seguimiento: boolean;
     citas: Cita[];
+    notas: Nota[];
+}
+
+export interface Nota {
+  id: number;
+  contenido: string;
 }

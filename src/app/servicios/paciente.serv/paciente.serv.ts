@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Paciente } from '../../interfaces/paciente/paciente';
+import { Nota, Paciente } from '../../interfaces/paciente/paciente';
 import { Cita } from '../../interfaces/cita/cita';
 
 @Injectable({
@@ -7,10 +7,10 @@ import { Cita } from '../../interfaces/cita/cita';
 })
 export class PacienteService {
   private pacientesDB: Paciente[] = [
-    { id: 101, nombre: 'María', apellidos: 'López', riesgo: 'bajo', discapacidad: 'intelectual', en_seguimiento: true, citas: [] },
-    { id: 102, nombre: 'Juan', apellidos: 'Pérez', riesgo: 'medio', discapacidad: 'intelectual', en_seguimiento: false, citas: [] },
-    { id: 103, nombre: 'Ana', apellidos: 'García', riesgo: 'alto', discapacidad: 'fisica', en_seguimiento: true, citas: [] },
-    { id: 104, nombre: 'Luis', apellidos: 'Miguel', riesgo: 'bajo', discapacidad: 'sensorial', en_seguimiento: false, citas: [] }
+    { id: 101, nombre: 'Paciente', apellidos: '1', riesgo: 'bajo', discapacidad: 'intelectual', en_seguimiento: true, citas: [], notas: [] },
+    { id: 102, nombre: 'Paciente', apellidos: '2', riesgo: 'medio', discapacidad: 'intelectual', en_seguimiento: false, citas: [], notas: [] },
+    { id: 103, nombre: 'Paciente', apellidos: '3', riesgo: 'alto', discapacidad: 'fisica', en_seguimiento: true, citas: [], notas: [] },
+    { id: 104, nombre: 'Paciente', apellidos: '4', riesgo: 'bajo', discapacidad: 'sensorial', en_seguimiento: false, citas: [], notas: [] }
   ];
 
   getPacientes(): Paciente[] {
@@ -33,7 +33,8 @@ export class PacienteService {
       riesgo: nuevoPaciente.riesgo,
       discapacidad: nuevoPaciente.discapacidad,
       en_seguimiento: nuevoPaciente.en_seguimiento ?? true,
-      citas: []
+      citas: [], 
+      notas: []
     };
 
     this.pacientesDB.push(pacienteFinal);
@@ -116,6 +117,52 @@ export class PacienteService {
     const paciente = this.getPacientePorId(pacienteId);
     if (paciente) {
       paciente.citas = paciente.citas.filter(cita => cita.id !== citaId);
+    }
+  }
+
+  getNotas(pacienteId: number): Nota[] {
+    const paciente = this.getPacientePorId(pacienteId);
+    return paciente && paciente.notas ? [...paciente.notas] : [];
+  }
+
+  getNotaById(pacienteId: number, notaId: number): Nota | undefined {
+    const notas = this.getNotas(pacienteId);
+    const nota = notas.find(n => n.id === notaId);
+    return nota ? { ...nota } : undefined;
+  }
+
+  agregarNota(pacienteId: number, contenido: string): void {
+    const paciente = this.getPacientePorId(pacienteId);
+    if (paciente) {
+      if (!paciente.notas) paciente.notas = [];
+      
+      const maxNotaId = paciente.notas.length > 0 
+        ? Math.max(...paciente.notas.map(n => n.id)) 
+        : 0;
+
+      const nuevaNota: Nota = {
+        id: maxNotaId + 1,
+        contenido: contenido
+      };
+
+      paciente.notas.push(nuevaNota);
+    }
+  }
+
+  actualizarNota(pacienteId: number, notaId: number, nuevoContenido: string): void {
+    const paciente = this.getPacientePorId(pacienteId);
+    if (paciente && paciente.notas) {
+      const index = paciente.notas.findIndex(n => n.id === notaId);
+      if (index !== -1) {
+        paciente.notas[index].contenido = nuevoContenido;
+      }
+    }
+  }
+
+  eliminarNota(pacienteId: number, notaId: number): void {
+    const paciente = this.getPacientePorId(pacienteId);
+    if (paciente && paciente.notas) {
+      paciente.notas = paciente.notas.filter(n => n.id !== notaId);
     }
   }
 }
