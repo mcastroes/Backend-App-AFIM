@@ -1,0 +1,15 @@
+<div class="bg-white rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.12)] p-6 w-full h-full border border-gray-50 flex flex-col">
+  <div class="flex justify-between items-center mb-4 shrink-0">
+    <h3 class="text-gray-500 font-medium text-sm">Historial de Citas</h3>
+  </div>
+
+  <div class="flex flex-col gap-3 overflow-y-auto pr-2 custom-scrollbar flex-1 min-h-0">
+    @for (cita of citas(); track cita.id) {
+      <div class="border border-gray-200 rounded-lg p-4 text-sm text-gray-600 font-medium bg-white shadow-sm shrink-0 flex flex-col gap-1">
+        <span class="text-gray-800 font-bold">{{ cita.fecha }}</span>
+      </div>
+    } @empty {
+      <p class="text-sm text-gray-400 italic">No hay citas registradas para este paciente.</p>
+    }
+  </div>
+</div>

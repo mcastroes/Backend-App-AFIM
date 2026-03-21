@@ -1,0 +1,27 @@
+@if (paciente(); as p) {
+  <div class="min-h-screen bg-white text-[#333] font-sans flex flex-col">
+    <header class="flex items-center justify-between p-6 bg-white shrink-0">
+      <div class="flex items-center gap-6">
+        <button (click)="volver()" class="text-2xl font-bold hover:scale-110 transition-transform">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <h1 class="text-3xl font-bold text-gray-500">Datos de: <span class="text-gray-800">{{ p.nombre }}</span></h1>
+      </div>
+    </header>
+
+    <main class="flex-1 flex items-stretch gap-12 p-12">
+      
+      <div class="w-1/2 flex flex-col">
+        <app-caracteristicas-paciente class="block h-full" [paciente]="p"></app-caracteristicas-paciente>
+      </div>
+
+      <div class="w-1/2 flex flex-col relative min-h-[500px]">
+        <app-citas 
+          class="absolute inset-0 block h-full"
+          [citas]="p.citas">
+        </app-citas>
+      </div>
+
+    </main>
+  </div>
+}

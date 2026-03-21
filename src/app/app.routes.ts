@@ -4,6 +4,7 @@ import { PaginaPrincipalAdministradorComponent } from './paginas/pagina-principa
 import { PaginaPrincipalUsuarioComponente } from './paginas/pagina-principal-usuario.componente/pagina-principal-usuario.componente';
 import { PaginaIndicePacientesComponente } from './paginas/pagina-indice-pacientes.componente/pagina-indice-pacientes.componente/pagina-indice-pacientes.componente';
 import { PaginaDetallePacienteComponent } from './paginas/pagina-detalle-paciente.componente/pagina-detalle-paciente.componente/pagina-detalle-paciente.componente';
+import { PaginaDatosPacienteComponent } from './paginas/pagina-datos-paciente.componente/pagina-datos-paciente.componente/pagina-datos-paciente.componente';
 
 export const routes: Routes = [
   { path: '', component: PaginaLoginComponent },
@@ -11,9 +12,9 @@ export const routes: Routes = [
   { path: 'admin/pagina-principal', component: PaginaPrincipalAdministradorComponent },
   { path: 'admin/pagina-indice-pacientes', component: PaginaIndicePacientesComponente },
   { path: 'admin/pagina-detalle-paciente/:id', component: PaginaDetallePacienteComponent },
+  { path: 'admin/pagina-datos-paciente/:id', component: PaginaDatosPacienteComponent },
 
   { path: 'usuario/pagina-principal-usuario', component: PaginaPrincipalUsuarioComponente },
-
   
   { path: '**', redirectTo: '' }
 ];

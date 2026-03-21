@@ -1,0 +1,28 @@
+<div class="bg-gray-50 border border-gray-100 rounded-[2rem] p-10 flex flex-col gap-8 shadow-sm h-full">
+  <h2 class="text-xl font-bold text-gray-800">Información Personal</h2>
+  
+  <div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-1 border-b border-gray-200 pb-4">
+      <span class="text-xs text-gray-400 uppercase font-bold tracking-wider">Nombre y Apellidos</span>
+      <span class="text-lg text-gray-700 font-medium">{{ paciente().nombre }} {{ paciente().apellidos }}</span>
+    </div>
+
+    <div class="flex flex-col gap-1 border-b border-gray-200 pb-4">
+      <span class="text-xs text-gray-400 uppercase font-bold tracking-wider">Nivel de Riesgo</span>
+      <span class="text-lg text-gray-700 font-medium capitalize">{{ paciente().riesgo || 'No especificado' }}</span>
+    </div>
+
+    <div class="flex flex-col gap-1 border-b border-gray-200 pb-4">
+      <span class="text-xs text-gray-400 uppercase font-bold tracking-wider">Discapacidad</span>
+      <span class="text-lg text-gray-700 font-medium capitalize">{{ paciente().discapacidad || 'Ninguna' }}</span>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <span class="text-xs text-gray-400 uppercase font-bold tracking-wider">Estado en el Sistema</span>
+      <div class="flex items-center gap-2 mt-1">
+        <span class="w-3 h-3 rounded-full" [class.bg-green-500]="paciente().en_seguimiento" [class.bg-red-500]="!paciente().en_seguimiento"></span>
+        <span class="text-lg text-gray-700 font-medium">{{ paciente().en_seguimiento ? 'En seguimiento' : 'Alta / Inactivo' }}</span>
+      </div>
+    </div>
+  </div>
+</div>
