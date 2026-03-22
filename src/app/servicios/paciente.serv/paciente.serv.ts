@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Nota, Paciente } from '../../interfaces/paciente/paciente';
+import { Nota, Recomendacion, Paciente } from '../../interfaces/paciente/paciente';
 import { Cita } from '../../interfaces/cita/cita';
 
 @Injectable({
@@ -7,10 +7,10 @@ import { Cita } from '../../interfaces/cita/cita';
 })
 export class PacienteService {
   private pacientesDB: Paciente[] = [
-    { id: 101, nombre: 'Paciente', apellidos: '1', riesgo: 'bajo', discapacidad: 'intelectual', en_seguimiento: true, citas: [], notas: [] },
-    { id: 102, nombre: 'Paciente', apellidos: '2', riesgo: 'medio', discapacidad: 'intelectual', en_seguimiento: false, citas: [], notas: [] },
-    { id: 103, nombre: 'Paciente', apellidos: '3', riesgo: 'alto', discapacidad: 'fisica', en_seguimiento: true, citas: [], notas: [] },
-    { id: 104, nombre: 'Paciente', apellidos: '4', riesgo: 'bajo', discapacidad: 'sensorial', en_seguimiento: false, citas: [], notas: [] }
+    { id: 101, nombre: 'Paciente', apellidos: '1', riesgo: 'bajo', discapacidad: 'intelectual', en_seguimiento: true, citas: [], notas: [], recomendaciones: [] },
+    { id: 102, nombre: 'Paciente', apellidos: '2', riesgo: 'medio', discapacidad: 'intelectual', en_seguimiento: false, citas: [], notas: [], recomendaciones: [] },
+    { id: 103, nombre: 'Paciente', apellidos: '3', riesgo: 'alto', discapacidad: 'fisica', en_seguimiento: true, citas: [], notas: [], recomendaciones: [] },
+    { id: 104, nombre: 'Paciente', apellidos: '4', riesgo: 'bajo', discapacidad: 'sensorial', en_seguimiento: false, citas: [], notas: [], recomendaciones: [] }
   ];
 
   getPacientes(): Paciente[] {
@@ -18,14 +18,12 @@ export class PacienteService {
   }
 
   getPacientePorId(id: number): Paciente | undefined {
-    return this.pacientesDB.find(paciente => paciente.id === id);
+    const paciente = this.pacientesDB.find(p => p.id === id);
+    return paciente ? { ...paciente } : undefined;
   }
 
   agregarPaciente(nuevoPaciente: any): void {
-    const maxId = this.pacientesDB.length > 0 
-      ? Math.max(...this.pacientesDB.map(p => p.id)) 
-      : 100;
-      
+    const maxId = this.pacientesDB.length > 0 ? Math.max(...this.pacientesDB.map(p => p.id)) : 100;
     const pacienteFinal: Paciente = {
       id: maxId + 1,
       nombre: nuevoPaciente.nombre,
@@ -34,135 +32,159 @@ export class PacienteService {
       discapacidad: nuevoPaciente.discapacidad,
       en_seguimiento: nuevoPaciente.en_seguimiento ?? true,
       citas: [], 
+      recomendaciones: [],
       notas: []
     };
-
-    this.pacientesDB.push(pacienteFinal);
+    this.pacientesDB = [...this.pacientesDB, pacienteFinal];
   }
 
   actualizarPaciente(id: number, datosActualizados: Partial<Paciente>): void {
-    const index = this.pacientesDB.findIndex(paciente => paciente.id === id);
+    const index = this.pacientesDB.findIndex(p => p.id === id);
     if (index !== -1) {
       this.pacientesDB[index] = { ...this.pacientesDB[index], ...datosActualizados };
+      this.pacientesDB = [...this.pacientesDB];
     }
   }
 
   eliminarPaciente(id: number): void {
-    this.pacientesDB = this.pacientesDB.filter(paciente => paciente.id !== id);
+    this.pacientesDB = this.pacientesDB.filter(p => p.id !== id);
   }
 
   filtrarPacientes(filtros: { nombre?: string, riesgo?: string, discapacidad?: string, en_seguimiento?: boolean }): Paciente[] {
     return this.pacientesDB.filter(paciente => {
       let coincide = true;
-
       if (filtros.nombre) {
         const terminoBusqueda = filtros.nombre.toLowerCase();
         const nombreCompleto = `${paciente.nombre} ${paciente.apellidos}`.toLowerCase();
         coincide = coincide && nombreCompleto.includes(terminoBusqueda);
       }
-
-      if (filtros.riesgo) {
-        coincide = coincide && paciente.riesgo === filtros.riesgo;
-      }
-
-      if (filtros.discapacidad) {
-        coincide = coincide && paciente.discapacidad === filtros.discapacidad;
-      }
-
-      if (filtros.en_seguimiento !== undefined) {
-        coincide = coincide && paciente.en_seguimiento === filtros.en_seguimiento;
-      }
-
+      if (filtros.riesgo) coincide = coincide && paciente.riesgo === filtros.riesgo;
+      if (filtros.discapacidad) coincide = coincide && paciente.discapacidad === filtros.discapacidad;
+      if (filtros.en_seguimiento !== undefined) coincide = coincide && paciente.en_seguimiento === filtros.en_seguimiento;
       return coincide;
     });
   }
 
   getCitas(pacienteId: number): Cita[] {
     const paciente = this.getPacientePorId(pacienteId);
-    return paciente ? [...paciente.citas] : [];
+    return paciente?.citas ? [...paciente.citas] : [];
   }
 
   getCitaPorId(pacienteId: number, citaId: number): Cita | undefined {
-    const paciente = this.getPacientePorId(pacienteId);
-    return paciente?.citas.find(cita => cita.id === citaId);
+    return this.getCitas(pacienteId).find(c => c.id === citaId);
   }
 
   agregarCita(pacienteId: number, nuevaCita: any): void {
-    const paciente = this.getPacientePorId(pacienteId);
-    if (paciente) {
-      const maxCitaId = paciente.citas.length > 0 
-        ? Math.max(...paciente.citas.map(c => c.id)) 
-        : 0;
+    const index = this.pacientesDB.findIndex(p => p.id === pacienteId);
+    if (index !== -1) {
+      const citas = this.pacientesDB[index].citas || [];
+      const maxCitaId = citas.length > 0 ? Math.max(...citas.map(c => c.id)) : 0;
+      const citaFinal = { estado: 'pendiente', ...nuevaCita, id: maxCitaId + 1 };
       
-      const citaFinal = {
-        ...nuevaCita,
-        id: maxCitaId + 1
+      this.pacientesDB[index] = {
+        ...this.pacientesDB[index],
+        citas: [...citas, citaFinal]
       };
-      
-      paciente.citas.push(citaFinal);
     }
   }
 
   actualizarCita(pacienteId: number, citaId: number, datosActualizados: Partial<Cita>): void {
-    const paciente = this.getPacientePorId(pacienteId);
-    if (paciente) {
-      const indexCita = paciente.citas.findIndex(c => c.id === citaId);
-      if (indexCita !== -1) {
-        paciente.citas[indexCita] = { ...paciente.citas[indexCita], ...datosActualizados };
-      }
+    const index = this.pacientesDB.findIndex(p => p.id === pacienteId);
+    if (index !== -1) {
+      const citas = this.pacientesDB[index].citas || [];
+      const citasActualizadas = citas.map(c => c.id === citaId ? { ...c, ...datosActualizados } : c);
+      
+      this.pacientesDB[index] = {
+        ...this.pacientesDB[index],
+        citas: citasActualizadas
+      };
     }
   }
 
   eliminarCita(pacienteId: number, citaId: number): void {
-    const paciente = this.getPacientePorId(pacienteId);
-    if (paciente) {
-      paciente.citas = paciente.citas.filter(cita => cita.id !== citaId);
+    const index = this.pacientesDB.findIndex(p => p.id === pacienteId);
+    if (index !== -1) {
+      const citas = this.pacientesDB[index].citas || [];
+      this.pacientesDB[index] = {
+        ...this.pacientesDB[index],
+        citas: citas.filter(c => c.id !== citaId)
+      };
     }
   }
 
   getNotas(pacienteId: number): Nota[] {
     const paciente = this.getPacientePorId(pacienteId);
-    return paciente && paciente.notas ? [...paciente.notas] : [];
+    return paciente?.notas ? [...paciente.notas] : [];
   }
 
   getNotaById(pacienteId: number, notaId: number): Nota | undefined {
-    const notas = this.getNotas(pacienteId);
-    const nota = notas.find(n => n.id === notaId);
-    return nota ? { ...nota } : undefined;
+    return this.getNotas(pacienteId).find(n => n.id === notaId);
   }
 
   agregarNota(pacienteId: number, contenido: string): void {
-    const paciente = this.getPacientePorId(pacienteId);
-    if (paciente) {
-      if (!paciente.notas) paciente.notas = [];
+    const index = this.pacientesDB.findIndex(p => p.id === pacienteId);
+    if (index !== -1) {
+      const notas = this.pacientesDB[index].notas || [];
+      const maxNotaId = notas.length > 0 ? Math.max(...notas.map(n => n.id)) : 0;
+      const nuevaNota: Nota = { id: maxNotaId + 1, contenido };
       
-      const maxNotaId = paciente.notas.length > 0 
-        ? Math.max(...paciente.notas.map(n => n.id)) 
-        : 0;
-
-      const nuevaNota: Nota = {
-        id: maxNotaId + 1,
-        contenido: contenido
+      this.pacientesDB[index] = {
+        ...this.pacientesDB[index],
+        notas: [...notas, nuevaNota]
       };
-
-      paciente.notas.push(nuevaNota);
     }
   }
 
   actualizarNota(pacienteId: number, notaId: number, nuevoContenido: string): void {
-    const paciente = this.getPacientePorId(pacienteId);
-    if (paciente && paciente.notas) {
-      const index = paciente.notas.findIndex(n => n.id === notaId);
-      if (index !== -1) {
-        paciente.notas[index].contenido = nuevoContenido;
-      }
+    const index = this.pacientesDB.findIndex(p => p.id === pacienteId);
+    if (index !== -1) {
+      const notas = this.pacientesDB[index].notas || [];
+      const notasActualizadas = notas.map(n => n.id === notaId ? { ...n, contenido: nuevoContenido } : n);
+      
+      this.pacientesDB[index] = {
+        ...this.pacientesDB[index],
+        notas: notasActualizadas
+      };
     }
   }
 
   eliminarNota(pacienteId: number, notaId: number): void {
+    const index = this.pacientesDB.findIndex(p => p.id === pacienteId);
+    if (index !== -1) {
+      const notas = this.pacientesDB[index].notas || [];
+      this.pacientesDB[index] = {
+        ...this.pacientesDB[index],
+        notas: notas.filter(n => n.id !== notaId)
+      };
+    }
+  }
+
+  getRecomendaciones(pacienteId: number): Recomendacion[] {
     const paciente = this.getPacientePorId(pacienteId);
-    if (paciente && paciente.notas) {
-      paciente.notas = paciente.notas.filter(n => n.id !== notaId);
+    return paciente?.recomendaciones ? [...paciente.recomendaciones] : [];
+  }
+
+  agregarRecomendacion(pacienteId: number, recomendacion: Omit<Recomendacion, 'id'>): void {
+    const index = this.pacientesDB.findIndex(p => p.id === pacienteId);
+    if (index !== -1) {
+      const recomendaciones = this.pacientesDB[index].recomendaciones || [];
+      const maxId = recomendaciones.length > 0 ? Math.max(...recomendaciones.map(r => r.id)) : 0;
+      
+      this.pacientesDB[index] = {
+        ...this.pacientesDB[index],
+        recomendaciones: [...recomendaciones, { id: maxId + 1, ...recomendacion }]
+      };
+    }
+  }
+
+  eliminarRecomendacion(pacienteId: number, recId: number): void {
+    const index = this.pacientesDB.findIndex(p => p.id === pacienteId);
+    if (index !== -1) {
+      const recomendaciones = this.pacientesDB[index].recomendaciones || [];
+      this.pacientesDB[index] = {
+        ...this.pacientesDB[index],
+        recomendaciones: recomendaciones.filter(r => r.id !== recId)
+      };
     }
   }
 }

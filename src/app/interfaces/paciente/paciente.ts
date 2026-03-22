@@ -9,9 +9,16 @@ export interface Paciente {
   en_seguimiento: boolean;
   citas: Cita[];
   notas: Nota[];
+  recomendaciones: Recomendacion[];
 }
 
 export interface Nota {
   id: number;
+  contenido: string;
+}
+
+export interface Recomendacion {
+  id: number;
+  titulo: string;
   contenido: string;
 }

@@ -3,6 +3,7 @@ export interface Cita {
   fecha: string;
   dia: number;
   hora: string;
+  estado: 'pendiente' | 'completada' | 'cancelada';
 }
 
 export interface CitaVista {

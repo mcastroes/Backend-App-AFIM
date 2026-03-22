@@ -10,7 +10,6 @@
     </header>
 
     <main class="flex-1 flex items-stretch gap-12 p-12">
-      
       <div class="w-1/2 flex flex-col">
         <app-caracteristicas-paciente class="block h-full" [paciente]="p"></app-caracteristicas-paciente>
       </div>
@@ -18,10 +17,10 @@
       <div class="w-1/2 flex flex-col relative min-h-[500px]">
         <app-citas 
           class="absolute inset-0 block h-full"
-          [citas]="p.citas">
+          [citas]="p.citas"
+          (estadoCambiado)="actualizarEstadoCita($event)">
         </app-citas>
       </div>
-
     </main>
   </div>
 }

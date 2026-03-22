@@ -1,0 +1,21 @@
+@if (paciente(); as p) {
+  <div class="min-h-screen bg-gray-50 flex flex-col p-8">
+    
+    <div class="mb-8 flex items-center gap-4 shrink-0">
+      <button (click)="volver()" class="bg-white border border-gray-300 rounded-lg p-3 hover:bg-gray-50 transition-colors shadow-sm">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </button>
+      <h1 class="text-3xl font-bold text-gray-800">Recomendaciones de {{ p.nombre }}</h1>
+    </div>
+
+    <div class="flex-1 flex items-center justify-center w-full">
+      <div class="w-[95%] max-w-[1600px]">
+        <app-recomendaciones 
+          [recomendaciones]="p.recomendaciones"
+          (nuevaRecomendacion)="crearRecomendacion($event)">
+        </app-recomendaciones>
+      </div>
+    </div>
+
+  </div>
+}

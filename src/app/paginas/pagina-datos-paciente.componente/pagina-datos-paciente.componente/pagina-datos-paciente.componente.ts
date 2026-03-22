@@ -34,4 +34,23 @@ export class PaginaDatosPacienteComponent implements OnInit {
   volver(): void {
     this.router.navigate(['/admin/pagina-detalle-paciente', this.paciente()?.id]);
   }
+
+  actualizarEstadoCita(evento: {id: number, nuevoEstado: any}): void {
+    const pActual = this.paciente();
+    if (!pActual) return;
+
+    this._pacienteServ.actualizarCita(pActual.id, evento.id, { estado: evento.nuevoEstado });
+
+    this.paciente.update(p => {
+      if (!p) return null;
+      return {
+        ...p,
+        citas: p.citas.map(cita => 
+          cita.id === evento.id 
+            ? { ...cita, estado: evento.nuevoEstado } 
+            : cita
+        )
+      };
+    });
+  }
 }
