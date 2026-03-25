@@ -1,5 +1,6 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 import { FiltroPacientesComponent } from '../../../componentes/filtro-pacientes.componente/filtro.pacientes.componente/filtro.pacientes.componente';
 import { ListaPacientesComponent } from '../../../componentes/lista-pacientes.componente/lista-pacientes.componente/lista-pacientes.componente';
 import { CrearPacienteComponent } from '../../../componentes/crear-paciente.componente/crear-paciente.componente/crear-paciente.componente';
@@ -15,6 +16,7 @@ import { Paciente } from '../../../interfaces/paciente/paciente';
 export class PaginaIndicePacientesComponente implements OnInit {
   private _pacienteServ = inject(PacienteService);
   private router = inject(Router);
+  private location = inject(Location);
 
   pacientesOriginales = signal<Paciente[]>([]);
   filtrosActuales = signal<any>({});
@@ -47,6 +49,10 @@ export class PaginaIndicePacientesComponente implements OnInit {
 
   ngOnInit(): void {
     this.pacientesOriginales.set(this._pacienteServ.getPacientes());
+  }
+
+  volver(): void {
+    this.router.navigate(['/admin/pagina-principal']);
   }
 
   aplicarFiltros(filtros: any): void {

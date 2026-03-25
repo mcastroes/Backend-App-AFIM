@@ -2,13 +2,16 @@
   
   <div class="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm shrink-0">
     <div class="flex justify-between items-center mb-6">
-      <button class="text-gray-400 hover:text-black p-1">&lt;</button>
-      <span class="font-bold text-gray-700">Septiembre 2025</span>
-      <button class="text-gray-400 hover:text-black p-1">&gt;</button>
+      <button (click)="cambiarMes(-1)" class="text-gray-400 hover:text-black p-1">&lt;</button>
+      <span class="font-bold text-gray-700 capitalize">
+        {{ calendarioServ.obtenerNombreMesCompleto(calendarioServ.fechaActual().getMonth()) }} 
+        {{ calendarioServ.fechaActual().getFullYear() }}
+      </span>
+      <button (click)="cambiarMes(1)" class="text-gray-400 hover:text-black p-1">&gt;</button>
     </div>
 
     <div class="grid grid-cols-7 text-center text-gray-400 text-xs mb-4 font-bold uppercase tracking-widest">
-      <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
+      <div>Lu</div><div>Ma</div><div>Mi</div><div>Ju</div><div>Vi</div><div>Sa</div><div>Do</div>
     </div>
 
     <div class="grid grid-cols-7 gap-y-1 text-center text-sm font-medium">
@@ -18,10 +21,12 @@
       @for (dia of diasMes(); track dia) {
         <div 
           (click)="seleccionarDia(dia)"
-          class="relative py-3 cursor-pointer transition-all rounded-xl flex flex-col items-center justify-center hover:bg-gray-100"
+          class="relative py-3 cursor-pointer transition-all rounded-xl flex flex-col items-center justify-center"
           [class.bg-[#333]]="dia === selectedDay()"
           [class.text-white]="dia === selectedDay()"
-          [class.text-gray-800]="dia !== selectedDay()">
+          [class.hover:bg-black]="dia === selectedDay()"
+          [class.text-gray-800]="dia !== selectedDay()"
+          [class.hover:bg-gray-100]="dia !== selectedDay()">
           {{ dia }}
           @if (tieneCitas(dia)) {
             <div class="absolute bottom-1 w-1.5 h-1.5 rounded-full" 
@@ -59,21 +64,21 @@
 
 @if (showModal()) {
   <div class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[100] p-4" (click)="cerrarModal()">
-    <div class="bg-white rounded-2xl p-8 w-full max-w-sm shadow-2xl scale-in-center" (click)="$event.stopPropagation()">
+    <form [formGroup]="citaForm" (ngSubmit)="onGuardar()" class="bg-white rounded-2xl p-8 w-full max-w-sm shadow-2xl scale-in-center" (click)="$event.stopPropagation()">
       <h3 class="text-xl font-bold text-gray-800 mb-6 italic">Añadir Cita - Día {{ selectedDay() }}</h3>
       <div class="flex flex-col gap-5">
-        <input #horaInput type="time" class="p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#A64E2E]">
-        <select #pacienteSelect class="p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#A64E2E]">
-          <option value="">Seleccionar paciente...</option>
+        <input formControlName="hora" type="time" class="p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#A64E2E]">
+        <select formControlName="id_paciente" class="p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#A64E2E]">
+          <option value="" disabled>Seleccionar paciente...</option>
           @for (p of listaPacientes(); track p.id) {
             <option [value]="p.id">{{ p.nombre }} {{ p.apellidos }}</option>
           }
         </select>
         <div class="flex gap-3 mt-4">
-          <button (click)="cerrarModal()" class="flex-1 py-3 text-gray-500 font-bold hover:bg-gray-100 rounded-xl transition-colors">Cancelar</button>
-          <button (click)="guardarCita(horaInput.value, pacienteSelect.value)" class="flex-1 py-3 bg-[#A64E2E] text-white font-bold rounded-xl active:scale-95 transition-transform">Guardar</button>
+          <button type="button" (click)="cerrarModal()" class="flex-1 py-3 text-gray-500 font-bold hover:bg-gray-100 rounded-xl transition-colors">Cancelar</button>
+          <button type="submit" [disabled]="citaForm.invalid" class="flex-1 py-3 bg-[#A64E2E] text-white font-bold rounded-xl active:scale-95 transition-transform disabled:opacity-50 disabled:cursor-not-allowed">Guardar</button>
         </div>
       </div>
-    </div>
+    </form>
   </div>
 }

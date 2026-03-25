@@ -1,46 +1,37 @@
-<div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md mx-4 relative">
-  <h2 class="text-2xl font-bold text-gray-700 mb-6">Añadir Paciente</h2>
-
-  <form [formGroup]="pacienteForm" (ngSubmit)="onGuardar()">
-    <div class="mb-4">
-      <label class="block text-gray-700 mb-2">Nombre</label>
-      <input type="text" formControlName="nombre" 
-             class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-[#333333] focus:outline-none">
+<div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-sm mx-4 relative border border-[#A64E2E] max-h-[90vh] overflow-y-auto custom-scrollbar">
+  <h2 class="text-2xl font-bold text-[#592014] mb-6">Nuevo Paciente</h2>
+  <form [formGroup]="pacienteForm" (ngSubmit)="onGuardar()" class="flex flex-col gap-5">
+    <div>
+      <label class="block text-[#A64E2E] font-bold mb-2 text-sm">Nombre</label>
+      <input type="text" formControlName="nombre" class="w-full bg-gray-50 border border-[#A64E2E]/50 rounded-xl p-3 text-base text-[#592014] focus:ring-2 focus:ring-[#E5D1CD] focus:outline-none transition-all">
     </div>
-
-    <div class="mb-4">
-      <label class="block text-gray-700 mb-2">Apellidos</label>
-      <input type="text" formControlName="apellidos" 
-             class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-[#333333] focus:outline-none">
+    <div>
+      <label class="block text-[#A64E2E] font-bold mb-2 text-sm">Apellidos</label>
+      <input type="text" formControlName="apellidos" class="w-full bg-gray-50 border border-[#A64E2E]/50 rounded-xl p-3 text-base text-[#592014] focus:ring-2 focus:ring-[#E5D1CD] focus:outline-none transition-all">
     </div>
-
-    <div class="mb-4">
-      <label class="block text-gray-700 mb-2">Nivel de riesgo</label>
-      <select formControlName="riesgo" class="w-full border border-gray-300 rounded-md p-2 bg-white">
-        <option value="">Seleccione...</option>
+    <div>
+      <label class="block text-[#A64E2E] font-bold mb-2 text-sm">Nivel de Riesgo</label>
+      <select formControlName="riesgo" class="w-full bg-gray-50 border border-[#A64E2E]/50 rounded-xl p-3 text-base text-[#592014] focus:ring-2 focus:ring-[#E5D1CD] focus:outline-none transition-all appearance-none">
+        <option value="" disabled>Seleccione nivel...</option>
         <option value="bajo">Bajo</option>
         <option value="medio">Medio</option>
         <option value="alto">Alto</option>
       </select>
     </div>
-
-    <div class="mb-8">
-      <label class="block text-gray-700 mb-2">Discapacidad (Opcional)</label>
-      <select formControlName="discapacidad" class="w-full border border-gray-300 rounded-md p-2 bg-white">
-        <option value="">Ninguna</option>
+    <div>
+      <label class="block text-[#A64E2E] font-bold mb-2 text-sm">Discapacidad</label>
+      <select formControlName="discapacidad" class="w-full bg-gray-50 border border-[#A64E2E]/50 rounded-xl p-3 text-base text-[#592014] focus:ring-2 focus:ring-[#E5D1CD] focus:outline-none transition-all appearance-none">
+        <option value="ninguna">Ninguna</option>
         <option value="fisica">Física</option>
         <option value="intelectual">Intelectual</option>
         <option value="sensorial">Sensorial</option>
       </select>
     </div>
-
-    <div class="flex justify-end gap-4">
-      <button type="button" (click)="onCancelar()" 
-              class="px-6 py-2 text-gray-600 font-medium hover:bg-gray-100 rounded-md transition-colors">
+    <div class="flex gap-3 mt-2">
+      <button type="button" (click)="cerrarModal()" class="flex-1 py-3 text-[#592014] font-bold hover:bg-[#E5D1CD]/40 rounded-xl transition-colors">
         Cancelar
       </button>
-      <button type="submit" 
-              class="bg-[#333333] text-white px-6 py-2 rounded-md hover:bg-black transition-colors">
+      <button type="submit" class="flex-1 py-3 bg-[#A64E2E] text-white font-bold rounded-xl hover:bg-[#8A3F2B] active:scale-95 transition-all">
         Guardar
       </button>
     </div>

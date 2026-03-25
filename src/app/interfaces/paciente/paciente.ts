@@ -12,6 +12,15 @@ export interface Paciente {
   recomendaciones: Recomendacion[];
 }
 
+export interface FiltrosPaciente {
+  nombre?: string;
+  riesgo?: 'bajo' | 'medio' | 'alto' | string;
+  discapacidad?: 'fisica' | 'intelectual' | 'sensorial' | string;
+  dia?: string;
+  mes?: string;
+  anio?: string;
+}
+
 export interface Nota {
   id: number;
   contenido: string;

@@ -1,5 +1,6 @@
 import { Component, output, inject } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { FiltrosPaciente } from '../../../interfaces/paciente/paciente';
 
 @Component({
   selector: 'app-filtro-pacientes',
@@ -9,10 +10,10 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
   styleUrl: './filtro.pacientes.componente.css'
 })
 export class FiltroPacientesComponent {
-  buscar = output<any>();
+  buscar = output<FiltrosPaciente>();
   private fb = inject(FormBuilder);
 
-  filtroForm: FormGroup = this.fb.group({
+  filtroForm = this.fb.nonNullable.group({
     nombre: ['', [Validators.minLength(3)]],
     riesgo: [''],
     discapacidad: [''],
@@ -21,7 +22,7 @@ export class FiltroPacientesComponent {
     anio: ['']
   });
 
-  esCampoValido(nombreCampo: string): boolean | null {
+  esCampoValido(nombreCampo: string): boolean {
     const campo = this.filtroForm.get(nombreCampo);
     return !!campo?.errors && !!campo?.touched;
   }
@@ -44,10 +45,10 @@ export class FiltroPacientesComponent {
       return;
     }
     
-    const formValues = this.filtroForm.value;
+    const formValues = this.filtroForm.getRawValue();
     const filtrosLimpios = Object.fromEntries(
       Object.entries(formValues).filter(([_, valor]) => valor !== '' && valor !== null)
-    );
+    ) as FiltrosPaciente;
     
     this.buscar.emit(filtrosLimpios);
   }

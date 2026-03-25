@@ -2,7 +2,8 @@ import { Component, HostListener, inject, signal, computed, OnInit } from '@angu
 import { Router } from '@angular/router';
 import { AlertaComponent } from '../../componentes/alerta.componente/alerta.componente/alerta.componente';
 import { CalendarioComponent } from '../../componentes/calendario.componente/calendario.componente/calendario.componente';
-import { PacienteService } from '../../servicios/paciente.serv/paciente.serv'; 
+import { PacienteService } from '../../servicios/paciente.serv/paciente.serv';
+import { CalendarioService } from '../../servicios/calendario.serv/calendario.serv';
 
 @Component({
   selector: 'app-pagina-principal-administrador',
@@ -15,21 +16,24 @@ export class PaginaPrincipalAdministradorComponent implements OnInit {
   
   private router = inject(Router);
   private _pacienteServ = inject(PacienteService);
+  public calendarioServ = inject(CalendarioService);
 
   showAlert = signal<boolean>(false);
-  diaSeleccionado = signal<number>(0);
+  diaSeleccionado = signal<number>(new Date().getDate());
   listaPacientes = signal<any[]>([]);
-  diasConCitas = signal<number[]>([]);
 
   citasDelDia = computed(() => {
     const diaSel = this.diaSeleccionado();
-    const pacientes = this.listaPacientes();
+    const fechaVista = this.calendarioServ.fechaActual();
+    const mesSel = fechaVista.getMonth();
+    const anioSel = fechaVista.getFullYear();
+    
     const citasVista: any[] = [];
 
-    pacientes.forEach(paciente => {
-      if (paciente.citas && paciente.citas.length > 0) {
+    this.listaPacientes().forEach(paciente => {
+      if (paciente.citas?.length > 0) {
         paciente.citas.forEach((cita: any) => {
-          if (cita.dia === diaSel) {
+          if (cita.dia === diaSel && cita.mes === mesSel && cita.anio === anioSel) {
             citasVista.push({
               hora: cita.hora,
               nombrePaciente: `${paciente.nombre} ${paciente.apellidos}`
@@ -42,6 +46,22 @@ export class PaginaPrincipalAdministradorComponent implements OnInit {
     return citasVista.sort((a, b) => a.hora.localeCompare(b.hora));
   });
 
+  diasConCitas = computed(() => {
+    const fechaVista = this.calendarioServ.fechaActual();
+    const mesSel = fechaVista.getMonth();
+    const anioSel = fechaVista.getFullYear();
+    const diasOcupados = new Set<number>();
+
+    this.listaPacientes().forEach(p => {
+      p.citas?.forEach((c: any) => {
+        if (c.mes === mesSel && c.anio === anioSel) {
+          diasOcupados.add(c.dia);
+        }
+      });
+    });
+    return Array.from(diasOcupados);
+  });
+
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     if (event.key.toLowerCase() === 'n') {
@@ -51,12 +71,6 @@ export class PaginaPrincipalAdministradorComponent implements OnInit {
 
   ngOnInit(): void {
     this.listaPacientes.set(this._pacienteServ.getPacientes());
-    
-    const diasOcupados = new Set<number>();
-    this.listaPacientes().forEach(p => {
-       p.citas?.forEach((c: any) => diasOcupados.add(c.dia));
-    });
-    this.diasConCitas.set(Array.from(diasOcupados));
   }
 
   procesarDiaSeleccionado(dia: number): void {
@@ -64,17 +78,17 @@ export class PaginaPrincipalAdministradorComponent implements OnInit {
   }
 
   procesarNuevaCita(datos: {dia: number, hora: string, id_paciente: number}): void {
+    const fechaVista = this.calendarioServ.fechaActual();
+    
     this._pacienteServ.agregarCita(datos.id_paciente, {
       dia: datos.dia,
+      mes: fechaVista.getMonth(),
+      anio: fechaVista.getFullYear(),
       hora: datos.hora
     });
     
     this.listaPacientes.set(this._pacienteServ.getPacientes());
     this.diaSeleccionado.set(datos.dia); 
-
-    if (!this.diasConCitas().includes(datos.dia)) {
-      this.diasConCitas.update(dias => [...dias, datos.dia]);
-    }
   }
 
   volver() {

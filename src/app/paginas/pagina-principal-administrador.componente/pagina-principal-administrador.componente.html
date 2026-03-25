@@ -1,41 +1,38 @@
-<div class="h-screen w-full bg-white flex flex-col font-sans text-[#333] overflow-hidden">
+<div class="h-screen w-full bg-[#EAE4E0] flex flex-col font-sans overflow-hidden">
   
-  <header class="h-20 w-full flex items-center justify-between px-8 shrink-0 border-b border-gray-100 relative bg-white z-20">
+  <header class="h-20 w-full flex items-center justify-between px-8 shrink-0 relative z-20">
     <div class="flex items-center gap-4">
-      <button (click)="volver()" class="text-gray-600 hover:bg-gray-100 p-2 rounded-full transition-all active:scale-90">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      <button (click)="volver()" class="text-[#592014] hover:bg-[#A64E2E]/10 p-2 rounded-full transition-all">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
       </button>
       <div class="flex items-center gap-3">
         <div class="w-10 h-10 bg-[#E5D1CD] rounded-full flex items-center justify-center text-[#592014] shadow-sm">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         </div>
-        <span class="text-gray-500 font-medium text-lg">Profesional</span>
+        <span class="text-[#592014] font-bold text-lg">Profesional</span>
       </div>
     </div>
-    <h2 class="absolute left-1/2 -translate-x-1/2 text-gray-800 font-bold text-xl tracking-tight uppercase">Página Principal</h2>
   </header>
 
-  <main class="flex-1 flex flex-row gap-8 p-6 overflow-hidden bg-white">
-    
-    <div class="w-1/2 flex flex-col gap-4 h-full">
+  <main class="flex-1 flex flex-row gap-8 p-8 overflow-hidden">
+    <div class="w-1/2 flex flex-col gap-6 h-full">
       <button (click)="irAGestionUsuarios()" 
-        class="flex-1 bg-[#F6F6F6] border border-gray-200 rounded-2xl text-gray-600 text-xl font-medium hover:bg-[#E5D1CD] hover:border-[#A64E2E] hover:text-[#592014] transition-all shadow-sm flex items-center justify-center px-8 text-center leading-tight">
-        Gestión de Personas-Usuarias
+        class="flex-1 bg-white border border-[#A64E2E] rounded-2xl text-[#592014] text-xl font-medium hover:bg-[#E5D1CD]/20 transition-all shadow-sm flex items-center justify-center px-8">
+        Gestión de Pacientes
       </button>
       
       <button (click)="irAGestionProfesionales()" 
-        class="flex-1 bg-[#F6F6F6] border border-gray-200 rounded-2xl text-gray-600 text-xl font-medium hover:bg-[#E5D1CD] hover:border-[#A64E2E] hover:text-[#592014] transition-all shadow-sm flex items-center justify-center px-8 text-center leading-tight">
-        Personas-Usuarias en seguimiento
+        class="flex-1 bg-white border border-[#A64E2E] rounded-2xl text-[#592014] text-xl font-medium hover:bg-[#E5D1CD]/20 transition-all shadow-sm flex items-center justify-center px-8">
+        Pacientes en Seguimiento
       </button>
       
       <button (click)="irAEstadisticas()" 
-        class="flex-1 bg-[#F6F6F6] border border-gray-200 rounded-2xl text-gray-600 text-xl font-medium hover:bg-[#E5D1CD] hover:border-[#A64E2E] hover:text-[#592014] transition-all shadow-sm flex items-center justify-center px-8 text-center leading-tight">
+        class="flex-1 bg-white border border-[#A64E2E] rounded-2xl text-[#592014] text-xl font-medium hover:bg-[#E5D1CD]/20 transition-all shadow-sm flex items-center justify-center px-8">
         Consultas Pasadas
       </button>
     </div>
 
-    <div class="w-1/2 h-full overflow-y-auto pr-2 flex flex-col gap-6 custom-scrollbar">
-      
+    <div class="w-1/2 h-full flex flex-col gap-6 overflow-y-auto custom-scrollbar pr-2">
       <app-calendario 
         class="w-full shrink-0"
         [listaPacientes]="listaPacientes()"
@@ -44,15 +41,6 @@
         (diaSeleccionado)="procesarDiaSeleccionado($event)"
         (nuevaCita)="procesarNuevaCita($event)">
       </app-calendario>
-
-      @if (showAlert()) {
-        <app-alerta 
-          [nombrePaciente]="'Fulanito'" 
-          (cerrar)="showAlert.set(false)"
-          class="shrink-0 mb-4">
-        </app-alerta>
-      }
-
     </div>
   </main>
 </div>

@@ -1,7 +1,8 @@
 export interface Cita {
   id: number;
-  fecha: string;
   dia: number;
+  mes: number;
+  anio: number;
   hora: string;
   estado: 'pendiente' | 'completada' | 'cancelada';
 }

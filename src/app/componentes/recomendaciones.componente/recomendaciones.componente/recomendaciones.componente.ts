@@ -1,5 +1,5 @@
 import { Component, input, output, inject, signal } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Recomendacion } from '../../../interfaces/paciente/paciente';
 
 @Component({
@@ -9,30 +9,31 @@ import { Recomendacion } from '../../../interfaces/paciente/paciente';
   templateUrl: './recomendaciones.componente.html'
 })
 export class RecomendacionesComponent {
+  private fb = inject(FormBuilder);
+
   recomendaciones = input.required<Recomendacion[]>();
   nuevaRecomendacion = output<{titulo: string, contenido: string}>();
 
-  mostrandoFormulario = signal(false);
-  private fb = inject(FormBuilder);
+  showModal = signal(false);
 
-  recomendacionForm: FormGroup = this.fb.group({
+  recomendacionForm = this.fb.nonNullable.group({
     titulo: ['', [Validators.required]],
     contenido: ['', [Validators.required]]
   });
 
-  abrirFormulario(): void {
+  abrirModal(): void {
     this.recomendacionForm.reset();
-    this.mostrandoFormulario.set(true);
+    this.showModal.set(true);
   }
 
-  cerrarFormulario(): void {
-    this.mostrandoFormulario.set(false);
+  cerrarModal(): void {
+    this.showModal.set(false);
   }
 
   onGuardar(): void {
     if (this.recomendacionForm.valid) {
-      this.nuevaRecomendacion.emit(this.recomendacionForm.value);
-      this.cerrarFormulario();
+      this.nuevaRecomendacion.emit(this.recomendacionForm.getRawValue());
+      this.cerrarModal();
     } else {
       this.recomendacionForm.markAllAsTouched();
     }

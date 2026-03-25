@@ -1,26 +1,47 @@
-import { Component, input, output, signal } from '@angular/core';
+import { Component, input, output, signal, inject, computed } from '@angular/core';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { CalendarioService } from '../../../servicios/calendario.serv/calendario.serv';
+import { Paciente } from '../../../interfaces/paciente/paciente'; 
 import { CitaVista } from '../../../interfaces/cita/cita';
 
 @Component({
   selector: 'app-calendario',
   standalone: true,
-  templateUrl: './calendario.componente.html',
-  styleUrls: ['./calendario.componente.css']
+  imports: [ReactiveFormsModule],
+  templateUrl: './calendario.componente.html'
 })
 export class CalendarioComponent {
-  listaPacientes = input.required<any[]>();
+  public calendarioServ = inject(CalendarioService);
+  private fb = inject(FormBuilder);
+
+  listaPacientes = input.required<Paciente[]>();
   citasDelDia = input.required<CitaVista[]>();
-  diasConCitas = input<number[]>([]);
+  diasConCitas = input.required<number[]>();
 
   diaSeleccionado = output<number>();
   nuevaCita = output<{dia: number, hora: string, id_paciente: number}>();
   
-  diasVacios = signal<number[]>([1, 2, 3]);
-  diasMes = signal<number[]>(Array.from({length: 31}, (_, i) => i + 1));
-  
-  selectedDay = signal<number>(0);
+  selectedDay = signal<number>(new Date().getDate());
   showAgenda = signal<boolean>(false);
   showModal = signal<boolean>(false);
+
+  citaForm = this.fb.nonNullable.group({
+    hora: ['', [Validators.required]],
+    id_paciente: ['', [Validators.required]]
+  });
+
+  diasMes = computed(() => {
+    const fecha = this.calendarioServ.fechaActual();
+    const dias = new Date(fecha.getFullYear(), fecha.getMonth() + 1, 0).getDate();
+    return Array.from({ length: dias }, (_, i) => i + 1);
+  });
+
+  diasVacios = computed(() => {
+    const fecha = this.calendarioServ.fechaActual();
+    const primerDia = new Date(fecha.getFullYear(), fecha.getMonth(), 1).getDay();
+    const diasVaciosCount = primerDia === 0 ? 6 : primerDia - 1;
+    return Array.from({ length: diasVaciosCount }, (_, i) => i);
+  });
 
   seleccionarDia(dia: number): void {
     this.selectedDay.set(dia);
@@ -28,11 +49,17 @@ export class CalendarioComponent {
     this.diaSeleccionado.emit(dia);
   }
 
-  cerrarAgenda(): void {
+  tieneCitas(dia: number): boolean {
+    return this.diasConCitas().includes(dia);
+  }
+
+  cambiarMes(incremento: number): void {
+    this.calendarioServ.cambiarMes(incremento);
     this.showAgenda.set(false);
   }
 
   abrirModal(): void {
+    this.citaForm.reset();
     this.showModal.set(true);
   }
 
@@ -40,19 +67,21 @@ export class CalendarioComponent {
     this.showModal.set(false);
   }
 
-  tieneCitas(dia: number): boolean {
-    return this.diasConCitas().includes(dia);
+  cerrarAgenda(): void {
+    this.showAgenda.set(false);
   }
 
-  guardarCita(hora: string, pacienteId: string): void {
-    if (!hora || !pacienteId || this.selectedDay() === 0) return;
-    
-    this.nuevaCita.emit({
-      dia: this.selectedDay(),
-      hora: hora,
-      id_paciente: Number(pacienteId)
-    });
-    
-    this.cerrarModal();
+  onGuardar(): void {
+    if (this.citaForm.valid) {
+      const formValues = this.citaForm.getRawValue();
+      this.nuevaCita.emit({
+        dia: this.selectedDay(),
+        hora: formValues.hora,
+        id_paciente: Number(formValues.id_paciente)
+      });
+      this.cerrarModal();
+    } else {
+      this.citaForm.markAllAsTouched();
+    }
   }
 }

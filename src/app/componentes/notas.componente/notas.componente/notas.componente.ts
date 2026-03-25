@@ -7,7 +7,7 @@ import { Nota } from '../../../interfaces/paciente/paciente';
   templateUrl: './notas.componente.html'
 })
 export class NotasComponent {
-  notas = input<Nota[]>([]);
+  notas = input.required<Nota[]>();
   nuevaNota = output<void>();
 
   onAgregarNota(): void {
