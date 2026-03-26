@@ -1,6 +1,5 @@
 import { Component, HostListener, inject, signal, computed, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertaComponent } from '../../componentes/alerta.componente/alerta.componente/alerta.componente';
 import { CalendarioComponent } from '../../componentes/calendario.componente/calendario.componente/calendario.componente';
 import { PacienteService } from '../../servicios/paciente.serv/paciente.serv';
 import { CalendarioService } from '../../servicios/calendario.serv/calendario.serv';
@@ -8,9 +7,8 @@ import { CalendarioService } from '../../servicios/calendario.serv/calendario.se
 @Component({
   selector: 'app-pagina-principal-administrador',
   standalone: true,
-  imports: [AlertaComponent, CalendarioComponent],
+  imports: [CalendarioComponent],
   templateUrl: './pagina-principal-administrador.componente.html',
-  styleUrl: './pagina-principal-administrador.componente.css'
 })
 export class PaginaPrincipalAdministradorComponent implements OnInit {
   

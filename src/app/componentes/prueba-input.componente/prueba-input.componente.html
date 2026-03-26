@@ -1,0 +1,41 @@
+<div class="min-h-screen flex flex-col bg-white text-[#592014] font-sans m-0 w-full"> 
+
+    <div class="flex justify-end w-full max-w-5xl mx-auto pt-12 pb-5 px-5">
+        <div class="flex items-center gap-4">
+            <span class="flex justify-center items-center h-10 bg-[#E5D1CD] border border-[#A64E2E] rounded-md text-[#592014] text-lg font-medium shadow-sm px-4 py-1">
+                Página 1/2
+            </span>
+            <button class="hover:scale-105 transition-transform cursor-pointer p-0 pl-1 text-[#592014]" (click)="reproducirAyuda()">
+                <audio #audioAyuda src="assets/audio/alerta.mp3"></audio>
+                <img class="w-14 h-auto" src="assets/Iconos/front-hand.svg" alt="Mano">
+            </button>
+        </div>
+    </div>
+
+    <div class="w-full max-w-5xl mx-auto px-5 flex-1">
+        
+        @for (pregunta of listaPreguntas; track pregunta.id) {
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
+                
+                <div class="w-full md:w-[45%] bg-[#FFFCFC] border border-[#A64E2E] rounded-md py-4 px-5 text-2xl font-medium text-gray-700 text-center shadow-sm">
+                    {{ pregunta.texto }}
+                </div>
+
+                <div class="w-full md:w-[50%]">
+                    <app-prueba-input 
+                        (respuesta)="pregunta.respuestaUsuario = $event">
+                    </app-prueba-input>
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+    <div class="flex justify-end w-full max-w-5xl mx-auto mt-12 px-5 pb-12 shrink-0">
+        <button class="bg-[#592014] hover:bg-black text-white py-4 px-8 rounded-md text-lg font-semibold tracking-wide shadow-md transition-colors duration-200 focus:ring-4 focus:ring-[#E5D1CD]" (click)="siguientePagina()">
+            SIGUIENTE PÁGINA
+        </button>
+    </div>
+
+</div>

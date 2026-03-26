@@ -27,13 +27,13 @@ export class PaginaLoginComponent {
 
         if (resultado.success) {
           if (resultado.role === 'admin') {
-            this.router.navigate(['admin/pagina-principal']);
+            this.router.navigate(['/admin/pagina-principal']);
           } else if (resultado.role === 'user') {
-            this.router.navigate(['usuario/pagina-principal-usuario']);
+            this.router.navigate(['/usuario/pagina-principal-usuario', resultado.userId]);
           }
         } else {
           this.messageType.set('error');
-          this.message.set('Código incorrecto. Inténtalo de nuevo.');
+          this.message.set('Código incorrecto. El ID no pertenece a ningún paciente registrado.');
         }
       },
       error: () => {

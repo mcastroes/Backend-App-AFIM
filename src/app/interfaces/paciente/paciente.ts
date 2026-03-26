@@ -1,4 +1,5 @@
 import { Cita } from '../cita/cita';
+import { ResultadoPrueba } from '../test_paciente/test_paciente';
 
 export interface Paciente {
   id: number;
@@ -10,6 +11,7 @@ export interface Paciente {
   citas: Cita[];
   notas: Nota[];
   recomendaciones: Recomendacion[];
+  resultadosPruebas: ResultadoPrueba[];
 }
 
 export interface FiltrosPaciente {

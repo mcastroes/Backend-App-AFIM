@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Nota, Recomendacion, Paciente } from '../../interfaces/paciente/paciente';
+import { Nota, Recomendacion, Paciente} from '../../interfaces/paciente/paciente';
+import { ResultadoPrueba } from '../../interfaces/test_paciente/test_paciente';
 import { Cita } from '../../interfaces/cita/cita';
 
 @Injectable({
@@ -7,10 +8,10 @@ import { Cita } from '../../interfaces/cita/cita';
 })
 export class PacienteService {
   private pacientesDB: Paciente[] = [
-    { id: 101, nombre: 'Paciente', apellidos: '1', riesgo: 'bajo', discapacidad: 'intelectual', en_seguimiento: true, citas: [], notas: [], recomendaciones: [] },
-    { id: 102, nombre: 'Paciente', apellidos: '2', riesgo: 'medio', discapacidad: 'intelectual', en_seguimiento: false, citas: [], notas: [], recomendaciones: [] },
-    { id: 103, nombre: 'Paciente', apellidos: '3', riesgo: 'alto', discapacidad: 'fisica', en_seguimiento: true, citas: [], notas: [], recomendaciones: [] },
-    { id: 104, nombre: 'Paciente', apellidos: '4', riesgo: 'bajo', discapacidad: 'sensorial', en_seguimiento: false, citas: [], notas: [], recomendaciones: [] }
+    { id: 101, nombre: 'Paciente', apellidos: '1', riesgo: 'bajo', discapacidad: 'intelectual', en_seguimiento: true, citas: [], notas: [], recomendaciones: [], resultadosPruebas: [] },
+    { id: 102, nombre: 'Paciente', apellidos: '2', riesgo: 'medio', discapacidad: 'intelectual', en_seguimiento: false, citas: [], notas: [], recomendaciones: [], resultadosPruebas: [] },
+    { id: 103, nombre: 'Paciente', apellidos: '3', riesgo: 'alto', discapacidad: 'fisica', en_seguimiento: true, citas: [], notas: [], recomendaciones: [], resultadosPruebas: [] },
+    { id: 104, nombre: 'Paciente', apellidos: '4', riesgo: 'bajo', discapacidad: 'sensorial', en_seguimiento: false, citas: [], notas: [], recomendaciones: [], resultadosPruebas: [] }
   ];
 
   getPacientes(): Paciente[] {
@@ -33,7 +34,8 @@ export class PacienteService {
       en_seguimiento: nuevoPaciente.en_seguimiento ?? true,
       citas: [], 
       recomendaciones: [],
-      notas: []
+      notas: [],
+      resultadosPruebas: []
     };
     this.pacientesDB = [...this.pacientesDB, pacienteFinal];
   }
@@ -63,6 +65,17 @@ export class PacienteService {
       if (filtros.en_seguimiento !== undefined) coincide = coincide && paciente.en_seguimiento === filtros.en_seguimiento;
       return coincide;
     });
+  }
+
+  agregarResultadoPrueba(pacienteId: number, nuevoResultado: ResultadoPrueba): void {
+    const index = this.pacientesDB.findIndex(p => p.id === pacienteId);
+    if (index !== -1) {
+      const resultados = this.pacientesDB[index].resultadosPruebas || [];
+      this.pacientesDB[index] = {
+        ...this.pacientesDB[index],
+        resultadosPruebas: [...resultados, nuevoResultado]
+      };
+    }
   }
 
   getCitas(pacienteId: number): Cita[] {

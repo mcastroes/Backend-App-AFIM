@@ -4,7 +4,6 @@ import { Component, input, output } from '@angular/core';
   selector: 'app-alerta',
   standalone: true,
   templateUrl: './alerta.componente.html',
-  styleUrl: './alerta.componente.css'
 })
 export class AlertaComponent {
   nombrePaciente = input<string>('Fulanito');

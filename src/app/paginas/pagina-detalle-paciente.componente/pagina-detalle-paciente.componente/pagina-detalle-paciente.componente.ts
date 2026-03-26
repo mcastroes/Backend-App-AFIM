@@ -45,6 +45,10 @@ export class PaginaDetallePacienteComponent implements OnInit {
     this.router.navigate(['/admin/pagina-recomendaciones', id]);
   }
 
+  irAResultadosPruebas(id: number): void {
+    this.router.navigate(['/admin/pagina-resultados-pruebas', id]);
+  }
+
   procesarNuevaNota(): void {
     const nueva = prompt('Escribe la nueva nota para el paciente:');
     const p = this.paciente();

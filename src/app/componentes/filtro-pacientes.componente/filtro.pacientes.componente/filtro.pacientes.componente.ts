@@ -7,7 +7,6 @@ import { FiltrosPaciente } from '../../../interfaces/paciente/paciente';
   standalone: true,
   imports: [ReactiveFormsModule], 
   templateUrl: './filtro.pacientes.componente.html',
-  styleUrl: './filtro.pacientes.componente.css'
 })
 export class FiltroPacientesComponent {
   buscar = output<FiltrosPaciente>();
