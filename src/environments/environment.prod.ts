@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://tu-backend.com/api'
+  apiUrl: 'https://backend-app-afim.onrender.com/api'
 };
