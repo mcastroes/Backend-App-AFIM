@@ -1,0 +1,60 @@
+<!-- Contenedor principal: Ocupa toda la altura (h-full) y usa Flexbox para organizar cabecera, contenido y pie -->
+<div class="h-full flex flex-col bg-white text-[#592014] font-sans m-0 w-full"> 
+
+    <!-- CABECERA: Muestra el progreso (Página X/2) y el botón de ayuda -->
+    <div class="flex justify-end w-full max-w-5xl mx-auto pt-6 pb-2 px-5 shrink-0">
+        <div class="flex items-center gap-4">
+            <!-- Indicador de página: Estilizado con colores corporativos y bordes redondeados -->
+            <span class="flex justify-center items-center h-10 bg-[#E5D1CD] border border-[#A64E2E] rounded-md text-[#592014] text-lg font-medium shadow-sm px-4 py-1">
+                Página {{ pasoActual }}/2
+            </span>
+            
+            <!-- Botón de Ayuda: Mejora la accesibilidad con soporte para reproducción de audio -->
+            <button class="flex items-center justify-center w-12 h-12 text-[#592014] hover:bg-[#A64E2E]/10 rounded-full transition-all active:scale-90" (click)="reproducirAyuda()" aria-label="Ayuda">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M13.5 21q-1.85 0-3.325-.85T7.6 17.8L5.35 13.5q-.3-.575-.15-1.187t.7-.938q.5-.325 1.088-.2t.962.625l1.55 3V4.5q0-.625.45-1.062T11 3q.625 0 1.063.438T12.5 4.5v7h1v-6q0-.625.45-1.062T15 4q.625 0 1.063.438T16.5 5.5v6h1v-4.5q0-.625.45-1.062T19 5.5q.625 0 1.063.438T20.5 7v7.5q0 2.7-1.9 4.6T13.5 21Z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- CUERPO PRINCIPAL: El contenido cambia dinámicamente según 'pasoActual' -->
+    <div class="w-full max-w-5xl mx-auto px-5 flex-1 flex items-center justify-center overflow-y-auto py-4">
+        
+        <!-- FASE 1: Preguntas de Texto (Orientación) -->
+        @if (pasoActual === 1) {
+            <div class="w-full">
+                <!-- Directiva @for: Itera sobre la lista de preguntas de forma eficiente (Angular 17+) -->
+                @for (pregunta of listaPreguntas; track pregunta.id) {
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-5">
+                        <!-- Texto de la pregunta: Centrado y con sombreado suave para legibilidad -->
+                        <div class="w-full md:w-[45%] bg-[#FFFCFC] border border-[#A64E2E] rounded-md py-3 px-5 text-xl font-medium text-gray-700 text-center shadow-sm">
+                            {{ pregunta.texto }}
+                        </div>
+                        <!-- Componente hijo reutilizable para el input de texto -->
+                        <div class="w-full md:w-[50%]">
+                            <app-prueba-input (respuesta)="pregunta.respuestaUsuario = $event"></app-prueba-input>
+                        </div>
+                    </div>
+                }
+            </div>
+        } 
+        <!-- FASE 2: Prueba de Dibujo (Biométrica) -->
+        @else {
+            <div class="w-full flex justify-center items-center h-full">
+                <!-- Componente hijo que maneja el Canvas y devuelve la imagen en Base64 -->
+                <app-prueba-dibujo (respuesta)="alRecibirDibujo($event)"></app-prueba-dibujo>
+            </div>
+        }
+
+    </div>
+
+    <!-- PIE DE PÁGINA: Botón de navegación principal -->
+    <div class="flex justify-end w-full max-w-5xl mx-auto mt-4 px-5 pb-6 shrink-0">
+        <!-- El texto del botón cambia según la fase actual mediante un operador ternario -->
+        <button class="bg-[#592014] hover:bg-black text-white py-3 px-8 rounded-md text-lg font-semibold tracking-wide shadow-md transition-colors duration-200 focus:ring-4 focus:ring-[#E5D1CD]" (click)="siguientePagina()">
+            {{ pasoActual === 2 ? 'FINALIZAR PRUEBA' : 'SIGUIENTE PÁGINA' }}
+        </button>
+    </div>
+
+</div>

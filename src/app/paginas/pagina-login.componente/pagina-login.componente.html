@@ -1,0 +1,10 @@
+<div class="min-h-screen flex items-center justify-center bg-[#FAFAFA] p-4">
+    <div class="w-full max-w-md">
+        <app-login
+            [isLoading]="isLoading()"
+            [messageType]="messageType()"
+            [message]="message()"
+            (submitPasscode)="procesarLogin($event)">
+        </app-login>
+    </div>
+</div>

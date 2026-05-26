@@ -1,0 +1,20 @@
+<div class="bg-white rounded-[2rem] p-6 w-full h-full border border-[#A64E2E] flex flex-col shadow-sm">
+  <div class="flex justify-between items-center mb-4 shrink-0">
+    <h3 class="text-[#592014] font-bold text-xl">Notas</h3>
+    <button (click)="onAgregarNota()" class="bg-[#E5D1CD] text-[#592014] w-8 h-8 flex items-center justify-center rounded-full text-xl font-bold hover:scale-110 hover:bg-[#D9C0BA] transition-all shadow-sm">
+      +
+    </button>
+  </div>
+
+  <div class="flex flex-col gap-3 overflow-y-auto pr-2 custom-scrollbar flex-1 min-h-0">
+    @for (nota of notas(); track nota.id) {
+      <div class="border border-[#A64E2E]/30 rounded-xl p-4 text-sm text-[#592014]/90 font-medium bg-white shadow-sm shrink-0 hover:border-[#A64E2E] transition-colors leading-relaxed">
+        {{ nota.contenido }}
+      </div>
+    } @empty {
+      <div class="flex flex-col items-center justify-center h-full text-[#A64E2E]/60 gap-2 py-6">
+        <p class="text-sm font-medium italic text-center">No hay notas registradas.</p>
+      </div>
+    }
+  </div>
+</div>

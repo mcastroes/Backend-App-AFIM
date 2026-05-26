@@ -1,0 +1,47 @@
+<!-- Contenedor Principal: Centrado y con tipografía 'Inter' para máxima legibilidad -->
+<div class="w-full max-w-[1200px] mx-auto p-[30px] relative font-['Inter',sans-serif]">
+
+    <!-- Botón Volver: Posicionado de forma absoluta para no interferir en el flujo central -->
+    <button class="bg-transparent border-none cursor-pointer p-0 absolute top-[25px] left-[25px] z-10" (click)="volver()">
+        <img class="w-[28px]" src="assets/Iconos/arrow-left-solid-full.svg" alt="Volver">
+    </button>
+
+    <!-- Zona de Tarjetas Informativas: Uso de Flexbox para organizar los recordatorios -->
+    <div class="flex justify-center items-center gap-[25px] mt-[20px]">
+
+        <!-- TARJETA 1: Introducción a la prueba -->
+        <div class="w-[370px] h-[335px] bg-[#FFFCFC] py-[40px] px-[35px] rounded-[25px] relative text-center shadow-[0_8px_35px_rgba(0,0,0,0.15)]">
+            <img class="w-[225px] h-auto mb-[20px] inline-block" src="assets/Img/Sol_nube.png" alt="Clima">
+            
+            <!-- Botón de Audio: Llama a la Web Speech API para leer el texto de esta tarjeta -->
+            <button class="bg-transparent border-none cursor-pointer absolute top-[20px] right-[20px] text-[#592014]" (click)="reproducirAudio('Te haremos algunas preguntas para ver como te encuentras hoy.')">
+                <img src="assets/Iconos/volume-up.svg" alt="Sonido">
+            </button>
+            
+            <p class="text-[22px] leading-[1.4] text-[#592014] font-semibold">
+                Te haremos algunas preguntas para ver como te encuentras hoy.
+            </p>
+        </div>
+
+        <!-- TARJETA 2: Instrucciones sobre el sistema de ayuda -->
+        <div class="w-[370px] bg-[#FFFCFC] py-[40px] px-[35px] rounded-[25px] relative text-center shadow-[0_8px_35px_rgba(0,0,0,0.15)]">
+            <img class="w-[140px] h-auto mb-[20px] inline-block" src="assets/Img/mano.png" alt="Ayuda">
+             
+             <button class="bg-transparent border-none cursor-pointer absolute top-[20px] right-[20px] text-[#592014]" (click)="reproducirAudio('Si tienes dudas o necesitas ayuda, pulsa este símbolo. Al pulsarlo, escucharás un sonido.')">
+                <img src="assets/Iconos/volume-up.svg" alt="Sonido">
+            </button>
+
+            <p class="text-[22px] leading-[1.4] text-[#592014] font-semibold">
+                Si tienes dudas o necesitas ayuda, pulsa este símbolo.
+                <br>Al pulsarlo, escucharás un sonido.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- BOTÓN DE ACCIÓN: Gran tamaño y contraste alto para facilitar el inicio del test -->
+    <button class="block w-[85%] max-w-[900px] mx-auto mt-[35px] bg-[#A64E2E] hover:bg-[#1a1a1a] text-white text-[22px] font-semibold p-[22px] border-none rounded-[20px] cursor-pointer tracking-[1px] uppercase transition-colors duration-300" (click)="empezar()">
+        EMPEZAR CUESTIONARIOS
+    </button>
+
+</div>

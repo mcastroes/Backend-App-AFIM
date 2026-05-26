@@ -1,0 +1,45 @@
+<div class="h-screen bg-[#EAE4E0] flex flex-col font-sans p-8 relative overflow-hidden">
+  <header class="flex justify-between items-center mb-8 shrink-0">
+    <button (click)="volver()" class="text-[#592014] hover:bg-[#A64E2E]/10 p-2 rounded-full transition-all">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5"/>
+        <path d="M12 19l-7-7 7-7"/>
+      </svg>
+    </button>
+  </header>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-12 flex-1 min-h-0">
+    <div class="flex flex-col min-h-0 h-full">
+      <div class="flex justify-between items-center mb-6 shrink-0">
+        <h2 class="text-3xl font-bold text-[#592014]">Personas-Usuarias registradas</h2>
+        <button (click)="abrirModalCreacion()" class="text-[#A64E2E] text-4xl font-light hover:scale-110 transition-transform cursor-pointer">+</button>
+      </div>
+      
+      <app-lista-pacientes 
+        class="flex-1 min-h-0"
+        [pacientes]="pacientesFiltrados()"
+        (seleccionarPaciente)="abrirPerfilPaciente($event)">
+      </app-lista-pacientes>
+    </div>
+
+    <div class="flex flex-col min-h-0 h-full">
+      <div class="mb-6 shrink-0">
+        <h2 class="text-3xl font-bold text-[#592014]">Filtros</h2>
+      </div>
+      
+      <app-filtro-pacientes 
+        class="flex-1 min-h-0"
+        (buscar)="aplicarFiltros($event)">
+      </app-filtro-pacientes>
+    </div>
+  </div>
+</div>
+
+@if (mostrarModal()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm transition-opacity p-4">
+    <app-crear-paciente 
+      (cerrar)="cerrarModal()" 
+      (guardar)="guardarNuevoPaciente($event)">
+    </app-crear-paciente>
+  </div>
+}

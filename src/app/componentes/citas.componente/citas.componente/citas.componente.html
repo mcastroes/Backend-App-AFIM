@@ -1,0 +1,72 @@
+<div class="bg-white rounded-[2rem] p-8 w-full h-full border border-[#A64E2E] flex flex-col shadow-sm">
+  <div class="flex justify-between items-center mb-8 shrink-0">
+    <h3 class="text-[#592014] font-bold text-2xl">Historial de Citas</h3>
+    <span class="bg-[#E5D1CD] text-[#592014] px-4 py-1.5 rounded-full text-xs font-black tracking-tight uppercase">
+      {{ citas().length }} REGISTROS
+    </span>
+  </div>
+
+  <div class="flex flex-col gap-5 overflow-y-auto pr-2 flex-1 min-h-0 custom-scrollbar">
+    @for (cita of citas(); track cita.id) {
+      <div class="group border border-[#A64E2E]/30 rounded-[1.5rem] p-5 bg-white shadow-sm hover:shadow-md transition-all duration-300 shrink-0 flex flex-col gap-4 hover:border-[#A64E2E]">
+        
+        <div class="flex justify-between items-start">
+          <div class="flex items-center gap-4">
+            <div class="flex flex-col items-center justify-center bg-[#E5D1CD]/30 border border-[#A64E2E]/20 rounded-2xl p-2 min-w-[65px] transition-colors">
+              <span class="text-[10px] font-black uppercase text-[#A64E2E] tracking-tighter">
+                {{ obtenerNombreMes(cita.mes) }}
+              </span>
+              <span class="text-2xl font-black text-[#592014] leading-none py-1">
+                {{ cita.dia }}
+              </span>
+              <span class="text-[10px] font-bold text-[#592014]/60">
+                {{ cita.anio }}
+              </span>
+            </div>
+
+            <div class="flex flex-col">
+              <span class="text-[#A64E2E] text-[10px] font-bold uppercase tracking-widest mb-1">Horario</span>
+              <div class="flex items-center gap-2 text-[#592014] font-bold text-lg">
+                <svg class="text-[#A64E2E]" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                {{ cita.hora }}
+              </div>
+            </div>
+          </div>
+          
+          <span class="text-[9px] uppercase font-black tracking-widest px-3 py-1.5 rounded-lg border shadow-sm"
+                [class.bg-amber-50]="cita.estado === 'pendiente'"
+                [class.text-amber-600]="cita.estado === 'pendiente'"
+                [class.border-amber-100]="cita.estado === 'pendiente'"
+                [class.bg-emerald-50]="cita.estado === 'completada'"
+                [class.text-emerald-600]="cita.estado === 'completada'"
+                [class.border-emerald-100]="cita.estado === 'completada'"
+                [class.bg-rose-50]="cita.estado === 'cancelada'"
+                [class.text-rose-600]="cita.estado === 'cancelada'"
+                [class.border-rose-100]="cita.estado === 'cancelada'">
+            {{ cita.estado }}
+          </span>
+        </div>
+
+        @if (cita.estado === 'pendiente') {
+          <div class="grid grid-cols-2 gap-3 mt-1 border-t border-[#A64E2E]/10 pt-4">
+            <button (click)="actualizarEstado(cita.id, 'completada')" 
+                    class="bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-xl py-2.5 text-[11px] font-black uppercase tracking-tight hover:bg-emerald-100 transition-all active:scale-95">
+              Completar
+            </button>
+            <button (click)="actualizarEstado(cita.id, 'cancelada')" 
+                    class="bg-rose-50 text-rose-700 border border-rose-200 rounded-xl py-2.5 text-[11px] font-black uppercase tracking-tight hover:bg-rose-100 transition-all active:scale-95">
+              Cancelar
+            </button>
+          </div>
+        }
+      </div>
+    } @empty {
+      <div class="flex flex-col items-center justify-center h-full text-[#A64E2E]/60 gap-4">
+        <p class="text-sm font-medium italic text-center px-6">Sin historial registrado.</p>
+      </div>
+    }
+  </div>
+</div>
